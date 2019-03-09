@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
+#include <time.h>
 
 
 using namespace std;
@@ -63,6 +65,54 @@ public:
 
 	}
 
+	void methodTwo()
+	{
+		randCallCount = 0;
+		while (randomized.size() < original.size())
+		{
+			int index = rand() % (int)original.size();
+			if (!containedInRandomized(original[index]))
+			{
+				randomized.push_back(original[index]);
+			}
+
+			randCallCount++;
+		}
+
+
+	}
+
+	bool containedInRandomized(Type item)
+	{
+		bool ret = false;
+		for(Type listedItem : randomized)
+		{
+			if (listedItem == item)
+			{
+				ret = true;
+				break;
+			}
+		}
+
+		return ret;
+	}
+
+	//Set sorts the Ints
+	void methodThree()
+	{
+		randCallCount = 0;
+		set<Type> temp;
+		while (temp.size() < original.size())
+		{
+			int index = rand() % (int)original.size();
+			temp.emplace(original[index]);
+			randCallCount++;
+		}
+
+		randomized.insert(randomized.begin(), temp.begin(), temp.end());
+
+	}
+
 	void testMethod(int methodNumber, int count)
 	{
 		
@@ -74,6 +124,10 @@ public:
 			if (methodNumber == 1)
 			{
 				methodOne();
+			}
+			else if(methodNumber == 2)
+			{
+				methodTwo();
 			}
 			else
 			{
@@ -91,6 +145,9 @@ public:
 					unchanged++;
 				}
 			}
+
+			totalUnchanged += unchanged;
+
 			cout << "unchanged: " << unchanged 
 				 << " random calls to rand() : " <<randCallCount 
 				 << endl;
@@ -124,10 +181,15 @@ int main()
 
 	//b
 	funcExp(strList, 6);
-
+	
+	srand(time(NULL));
 	RandomList<int> numbers({ 0,1,2,3,4,5,6,7,8,9 });
+	
+	cout << "Method One ;" << endl;
 	numbers.testMethod(1, 20);
-
+	cout << endl;
+	cout << "Method Two ;" << endl;
+	numbers.testMethod(2, 20);
 }
 
 
