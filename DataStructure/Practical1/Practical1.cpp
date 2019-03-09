@@ -52,17 +52,18 @@ public:
 	void methodOne()
 	{
 		randCallCount = 0;
-		vector<Type> temp;
+		vector<Type> temp = original;
 		while (temp.size() > 0)
 		{
 			int index = rand() % (int)temp.size();
-			randomized.push_back(original[index]);
+			randomized.push_back(temp[index]);
+			temp.erase(temp.begin() + index);
 			randCallCount++;
 		}
 
 	}
 
-	void testMethod(void(*function_ptr)(), int count)
+	void testMethod(int methodNumber, int count)
 	{
 		
 		int totalUnchanged = 0;
@@ -70,10 +71,19 @@ public:
 		for (int i = 0; i < count; i++)
 		{
 			randomized.clear();
-			(*function_ptr)();
+			if (methodNumber == 1)
+			{
+				methodOne();
+			}
+			else
+			{
+				cout << "No corispinding method Number" << endl;
+				break;
+			}
+			
 			int unchanged = 0;
 
-			for (unsigned int j = 0; i < original.size(); j++)
+			for (unsigned int j = 0; j < original.size(); j++)
 			{
 				cout << randomized[j] << " ";
 				if (original[j] == randomized[j])
@@ -100,39 +110,6 @@ private:
 
 
 
-
-
-//template <typename Type>
-//void compareAndPrint(vector<Type> originalList, vector<Type> randomList, )
-//{
-//	int randCallCount = 0;
-//	vector<Type> retList;
-//	while (list.size() > 0)
-//	{
-//		int index = rand() % (int)list.size();
-//		retList.push_back(list[index])
-//			randCallCount++;
-//	}
-//
-//	return retList;
-//}
-//
-//template <typename Type>
-//vector<Type> methodOne(vector<Type> list)
-//{
-//	int randCallCount = 0;
-//	vector<Type> retList;
-//	while (list.size() > 0)
-//	{
-//		int index = rand() % (int)list.size();
-//		retList.push_back(list[index])
-//		randCallCount++;
-//	}
-//
-//	return retList;
-//}
-
-
 int main()
 {
 	//Explain to your tutor the meaning and functionalities of this program.Test it with the
@@ -148,19 +125,9 @@ int main()
 	//b
 	funcExp(strList, 6);
 
-	//int listNormal[10] = {0,1,2,3,4,5,6,7,8,9};
 	RandomList<int> numbers({ 0,1,2,3,4,5,6,7,8,9 });
-	numbers.testMethod(nmethodOne(), 20);
+	numbers.testMethod(1, 20);
 
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
