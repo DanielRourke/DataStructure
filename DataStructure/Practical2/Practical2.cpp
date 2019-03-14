@@ -16,6 +16,7 @@ int binarySearch(int arr[], int size, int target)
 		if (arr[middle] == target)
 		{
 			return middle;
+			break;
 		}
 		else if (arr[middle] < target)
 		{
