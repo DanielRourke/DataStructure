@@ -10,22 +10,25 @@ int binarySearch(int arr[], int size, int target)
 {
 	int start = 0;
 	int end = size - 1;
-	int middle = start + end /2;
+	int middle = (start + end) / 2;
 	while (start < end)
 	{
+		
 		if (arr[middle] == target)
 		{
 			return middle;
-			break;
+
 		}
 		else if (arr[middle] < target)
 		{
 			start = middle + 1;
+
 		}
 		else
 		{
 			end = middle - 1;
 		}
+		middle = (start + end) / 2;
 	}
 	return -1;
 }
@@ -42,16 +45,67 @@ int linearSearch(int arr[], int size, int target)
 	return -1;
 }
 
-//void sum(int mata[][], int matb[][], int *matc[][], int n)
-//{
-//	for (int i = 0; i < n; i++)
-//	{
-//		for (int j = 0; j < n; j++)
-//		{
-//			matc[i][j] = mata[i][j]
-//		}
-//	}
-//}
+void sum(int **A, int **B, int **C, int n)
+{
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			C[i][j] = A[i][j] + B[i][j];
+			cout << C[i][j] << ", ";
+		}
+		cout << endl;
+	}
+
+
+}
+
+void intialise()
+{
+	int n;
+	int **matrixA, **matrixB, **matrixC;
+	cout << "Please Enter the size of the n : " << endl;
+	cin >> n;
+
+	matrixA = new int*[n];
+	matrixB = new int*[n];
+	matrixC = new int*[n];
+	for (int i = 0; i < n; i++)
+	{
+		matrixA[i] = new int[n];
+		matrixB[i] = new int[n];
+		matrixC[i] = new int[n];
+	}
+	
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cout << "Please Enter Value for Matrix A [" << i << "][" << j << "] :" << endl;
+			cin >> matrixA[i][j];
+			cout << "Please Enter Value for Matrix B [" << i << "][" << j << "] :" << endl;
+			cin >> matrixB[i][j];
+		}
+
+	}
+
+	sum(matrixA, matrixB, matrixC, n);
+
+	for (int i = 0; i < n; i++)
+	{
+		delete [] matrixA[i];
+		delete [] matrixB[i];
+		delete [] matrixC[i];
+	}
+
+	delete matrixA;
+	delete matrixB;
+	delete matrixC;
+
+}
+
+
 
 void printResult(int target, int result)
 {
@@ -67,18 +121,20 @@ void printResult(int target, int result)
 
 int main()
 {
-	int orderedNumbers[] = { 1, 3, 8, 9, 12, 14, 22, 25, 33, 34, 38, 59, 61, 66, 68, 73, 75, 99, 101, 203, 454 };
-	int target;
+	//int orderedNumbers[] = { 1, 3, 8, 9, 12, 14, 22, 25, 33, 34, 38, 59, 61, 66, 68, 73, 75, 99, 101, 203, 454 };
+	//int target;
 
 
-	cout << "Enter a number to search for : ";
-	cin >> target;
-	printResult(target, linearSearch(orderedNumbers, 21, target));
+	//cout << "Enter a number to search for : ";
+	//cin >> target;
+	//printResult(target, linearSearch(orderedNumbers, 21, target));
 
 
-	cout << "Enter a number to search for : ";
-	cin >> target;
-	printResult(target, binarySearch(orderedNumbers, 21, target));
+	//cout << "Enter a number to search for : ";
+	//cin >> target;
+	//printResult(target, binarySearch(orderedNumbers,21 , target));
+
+	intialise();
 	
 }
 
