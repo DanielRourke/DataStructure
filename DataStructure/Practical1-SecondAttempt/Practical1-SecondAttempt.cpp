@@ -57,7 +57,7 @@ bool containedInRandomized(vector<Type> *randomized,Type item)
 
 
 template<typename Type>
-void testMethod(int(method*)(*vector<Type>, *vector<Type>), int count, vector<Type> *orignial, vector<Type> *randomized)
+void testMethod( int (method*)(*vector<Type>, *vector<Type>), int count,)
 {
 
 	int totalUnchanged = 0;
@@ -98,8 +98,8 @@ int main()
 	//methodOne(&original, &randomized);
 	//methodTwo(&original, &randomized);
 
-	testMethod(&methodOne(original, randomized), 20);
-	testMethod(&methodTwo(original, randomized), 20);
+	testMethod(methodOne(original, randomized), 20 );
+	testMethod(methodTwo(original, randomized), 20);
 
 
 }
