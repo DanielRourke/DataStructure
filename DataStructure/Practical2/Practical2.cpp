@@ -47,7 +47,7 @@ int linearSearch(int arr[], int size, int target)
 
 void sum(int **A, int **B, int **C, int n)
 {
-
+	cout << "Matrix C Sum of A and B" << endl;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < n; j++)

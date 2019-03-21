@@ -1,0 +1,12 @@
+﻿'Practical2.exe' (Win32): Loaded 'D:\University\Repos\Data Structure And Algorithms\DataStructure\DataStructure\Debug\Practical2.exe'. Symbols loaded.
+'Practical2.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ntdll.dll'. Cannot find or open the PDB file.
+'Practical2.exe' (Win32): Loaded 'C:\Windows\SysWOW64\kernel32.dll'. Cannot find or open the PDB file.
+'Practical2.exe' (Win32): Loaded 'C:\Windows\SysWOW64\KernelBase.dll'. Cannot find or open the PDB file.
+'Practical2.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msvcp140d.dll'. Cannot find or open the PDB file.
+'Practical2.exe' (Win32): Loaded 'C:\Windows\SysWOW64\vcruntime140d.dll'. Cannot find or open the PDB file.
+'Practical2.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ucrtbased.dll'. Cannot find or open the PDB file.
+The thread 0x680 has exited with code 0 (0x0).
+The thread 0x3710 has exited with code -1073741749 (0xc000004b).
+The thread 0x68c has exited with code -1073741510 (0xc000013a).
+The thread 0x3c98 has exited with code -1073741510 (0xc000013a).
+The program '[6504] Practical2.exe' has exited with code -1073741510 (0xc000013a).
