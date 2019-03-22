@@ -6,12 +6,13 @@
 * Author: dongmo
 */
 #include "pch.h"
-
+#include "time.h"
 #include "Neighbour.h"
 #include "Board.h"
 
 int main()
 {
+	srand(time(NULL));
 	cout << "Base code for Practical 3.4" << endl;
 	cout << "Input the size of board, say (3 3), (3 5) or (5 5): " << endl;
 
@@ -19,7 +20,9 @@ int main()
 	cin >> row >> col;
 
 	Board board(row, col);
-	board.play();
+	//board.play();
+	board.randomPlay();
+	board.printMoves();
 
 	return 0;
 }

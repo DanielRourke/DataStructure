@@ -8,9 +8,7 @@
 #include <set>
 #include <time.h>
 
-
 using namespace std;
-
 template <typename Type>
 void funcExp(Type list[], int size)
 {

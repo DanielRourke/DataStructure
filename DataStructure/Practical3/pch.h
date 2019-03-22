@@ -10,7 +10,11 @@
 #define PCH_H
 
 #include <iostream>
-#include<list>
+#include <list>
+#include <vector>
+#include <stack>
+#include <algorithm>
+#include <cstdlib>
 using namespace std;
 
 

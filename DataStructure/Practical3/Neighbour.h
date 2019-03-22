@@ -5,12 +5,12 @@
  *      Author: dongmo
  */
 
+
+
 #ifndef NEIGHBOUR_H_
 #define NEIGHBOUR_H_
 
 struct NeighbourCell {
-
-
 	string first;
 	int pipCount;
 };
