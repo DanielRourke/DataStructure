@@ -15,6 +15,7 @@
 #include <stack>
 #include <algorithm>
 #include <cstdlib>
+#include <string>
 using namespace std;
 
 
