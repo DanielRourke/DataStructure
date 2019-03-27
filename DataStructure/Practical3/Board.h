@@ -76,28 +76,28 @@ void Board::checkNeighbors(int x, int y) {
 
 	if (isInBounds(x + 1, y) && !isEmpty(x + 1,y))
 	{
-		temp.first = "Right : ";
+		temp.first = "Bottom : ";
 		temp.pipCount = grid[x + 1][y];
 		neighbours.push_back(temp);
 	}
 
 	if (isInBounds(x - 1, y) && !isEmpty(x - 1, y))
 	{
-		temp.first = "Left : ";
-		temp.pipCount = grid[x -1 ][y];
+		temp.first = "Top : ";
+		temp.pipCount = grid[x - 1 ][y];
 		neighbours.push_back(temp);
 	}
 
 	if (isInBounds(x, y + 1) && !isEmpty(x, y + 1))
 	{
-		temp.first = "Top : ";
+		temp.first = "Right : ";
 		temp.pipCount = grid[x][y + 1];
 		neighbours.push_back(temp);
 	}
 
 	if (isInBounds(x, y - 1) && !isEmpty(x, y - 1))
 	{
-		temp.first = "Bottom : ";
+		temp.first = "Left : ";
 		temp.pipCount = grid[x][y - 1];
 		neighbours.push_back(temp);
 	}
@@ -117,6 +117,7 @@ void Board::checkNeighbors(int x, int y) {
 
 bool Board::addMove(int player, int x, int y) 
 {
+	cout << x << " : " << y << endl;
 	checkNeighbors(x, y);
 	//left.remove(x * row + y);
 	move.push(make_pair(x, y));
