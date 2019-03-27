@@ -18,6 +18,7 @@ private:
 	list<int> left;
 	//vector<int> remaining;
 	stack<pair<int, int>> move;
+	vector<NeighbourCell> neighbours;
 public:
 	Board(int r, int c) {
 		row = r;
@@ -63,22 +64,53 @@ public:
 	void play();
 	void printMoves();
 	void randomPlay();
+	bool isValidMove(int x,int y);
+	bool isInBounds(int x, int y);
+	bool isEmpty(int x , int y);
 };
 
 void Board::checkNeighbors(int x, int y) {
-    /*
-	int index = 0;
-	for (int i = -1; i < 2; i+=2)
+
+	neighbours.clear();
+	NeighbourCell temp;
+
+	if (isInBounds(x + 1, y) && !isEmpty(x + 1,y))
 	{
-		for(int j = -1; j < 2; j+=2)
-		{
-			if( x  < row  && x >= 0 && y < col && y  >= 0  && grid[x+i][y+j])
-			{
-				
-			}
-		}
-	if x< row 
-	*/
+		temp.first = "Right : ";
+		temp.pipCount = grid[x + 1][y];
+		neighbours.push_back(temp);
+	}
+
+	if (isInBounds(x - 1, y) && !isEmpty(x - 1, y))
+	{
+		temp.first = "Left : ";
+		temp.pipCount = grid[x -1 ][y];
+		neighbours.push_back(temp);
+	}
+
+	if (isInBounds(x, y + 1) && !isEmpty(x, y + 1))
+	{
+		temp.first = "Top : ";
+		temp.pipCount = grid[x][y + 1];
+		neighbours.push_back(temp);
+	}
+
+	if (isInBounds(x, y - 1) && !isEmpty(x, y - 1))
+	{
+		temp.first = "Bottom : ";
+		temp.pipCount = grid[x][y - 1];
+		neighbours.push_back(temp);
+	}
+	int count = 0;
+
+	for (NeighbourCell neighboor : neighbours)
+	{
+		cout << neighboor.first << neighboor.pipCount << endl;
+		count += neighboor.pipCount;
+	}
+
+	cout << "Total : " << count << endl;
+	
 	return;
 }
 
@@ -122,6 +154,24 @@ void Board::randomPlay()
 		addMove(1, k % row, k / col);
 	} while (left.size() > 0);
 
+}
+
+inline bool Board::isValidMove(int x, int y)
+{
+	if (isInBounds(x, y) && isEmpty(x,y))
+		return true;
+	else
+		return false;
+}
+
+inline bool Board::isInBounds(int x, int y)
+{
+	return x < row  && x >= 0 && y < col && y >= 0;
+}
+
+inline bool Board::isEmpty(int x, int y)
+{
+	return grid[x][y] == 0;
 }
 
 void Board::printBoard() {
