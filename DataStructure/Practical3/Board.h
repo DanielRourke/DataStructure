@@ -33,7 +33,6 @@ public:
 
 		for (int i = 0; i < row*col; i++) {
 			left.push_back(i);
-			//remaining.push_back(i);
 		}
 
 	}
@@ -103,6 +102,8 @@ void Board::checkNeighbors(int x, int y) {
 	}
 	int count = 0;
 
+	cout << x << " : " << y << endl;
+
 	for (NeighbourCell neighboor : neighbours)
 	{
 		cout << neighboor.first << neighboor.pipCount << endl;
@@ -117,7 +118,7 @@ void Board::checkNeighbors(int x, int y) {
 
 bool Board::addMove(int player, int x, int y) 
 {
-	cout << x << " : " << y << endl;
+	
 	checkNeighbors(x, y);
 	//left.remove(x * row + y);
 	move.push(make_pair(x, y));
@@ -140,7 +141,6 @@ void Board::play() {
 
 void Board::randomPlay()
 {
-	int x, y;
 
 	do {
 		cout << "Game board:" << endl;
@@ -148,11 +148,9 @@ void Board::randomPlay()
 		list<int>::iterator itr = left.begin();
 		advance(itr, rand() % left.size());
 		int k = *itr;
+		//cout << k << " " << k / col << " " << k % col << endl;
 		left.remove(k);
-		//int k = remaining[rand() % (int)remaining.size()];
-
-
-		addMove(1, k % row, k / col);
+		addMove(1,  k / col, k % col);
 	} while (left.size() > 0);
 
 }
@@ -212,11 +210,24 @@ void Board::printBoard() {
 
 void Board::printMoves()
 {
-	for (int i = move.size() ; i >0 ; i--)
+	stack<pair<int, int>> temp;
+	while (!move.empty())
 	{
-		cout << "Move : " << i << " x: " << move.top().first + 1 << " y: " << move.top().second + 1<< endl;
+		temp.push(move.top());
 		move.pop();
 	}
+	cout << temp.size() << endl;
+
+	int count = 1;
+
+	while (!temp.empty())
+	{
+		cout << "Move : " << count << " x: " << temp.top().first + 1 << " y: " << temp.top().second + 1 << endl;
+		temp.pop();
+		count++;
+	}
+
+
 }
 
 #endif /* BOARD_H_ */
