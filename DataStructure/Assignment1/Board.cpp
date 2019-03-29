@@ -1,109 +1,36 @@
 #include "pch.h"
 
-void Board::checkNeighbors(int x, int y) {
+Board::Board(int r, int c) {
+	row = r;
+	col = c;
 
-	neighbours.clear();
-	Neighbour temp;
-
-	if (isInBounds(x + 1, y) && !isEmpty(x + 1, y))
-	{
-		temp.first = "Bottom : ";
-		temp.pipCount = grid[x + 1][y];
-		neighbours.push_back(temp);
-	}
-
-	if (isInBounds(x - 1, y) && !isEmpty(x - 1, y))
-	{
-		temp.first = "Top : ";
-		temp.pipCount = grid[x - 1][y];
-		neighbours.push_back(temp);
-	}
-
-	if (isInBounds(x, y + 1) && !isEmpty(x, y + 1))
-	{
-		temp.first = "Right : ";
-		temp.pipCount = grid[x][y + 1];
-		neighbours.push_back(temp);
-	}
-
-	if (isInBounds(x, y - 1) && !isEmpty(x, y - 1))
-	{
-		temp.first = "Left : ";
-		temp.pipCount = grid[x][y - 1];
-		neighbours.push_back(temp);
-	}
-	int count = 0;
-
-	for (Neighbour neighboor : neighbours)
-	{
-		cout << neighboor.first << neighboor.pipCount << endl;
-		count += neighboor.pipCount;
-	}
-
-	cout << "Total : " << count << endl;
-
-	return;
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+		{
+			grid.emplace(Move(i, j), 0);
+		}
 }
 
-
-bool Board::addMove(int player, int x, int y)
+Board::Board(const Board& cboard) 
 {
-	cout << x << " : " << y << endl;
-	checkNeighbors(x, y);
-	//left.remove(x * row + y);
-	move.push(make_pair(x, y));
-	grid[x][y] = rand() % 6 + 1;
-	return true;
+	row = cboard.row;
+	col = cboard.col;
+	grid = cboard.grid;
 }
 
-void Board::play() {
-	int x, y;
-
-	do {
-		cout << "Game board:" << endl;
-		this->printBoard();
-
-
-		addMove(1, x - 1, y - 1);
-	} while (left.size() > 0);
-}
-
-void Board::randomPlay()
+bool Board::isValidMove(Move move) 
 {
-
-
-	do {
-		cout << "Game board:" << endl;
-		this->printBoard();
-		list<int>::iterator itr = left.begin();
-		advance(itr, rand() % left.size());
-		int k = *itr;
-		left.remove(k);
-		//int k = remaining[rand() % (int)remaining.size()];
-
-
-		addMove(1, k % row, k / col);
-	} while (left.size() > 0);
-
-}
-
-inline bool Board::isValidMove(int x, int y)
-{
-	if (isInBounds(x, y) && isEmpty(x, y))
+		if (isInBounds(move.x, move.y) && grid.at(move) == 0 && move.captureTotal <= 6 && (move.captureTotal == 0 || move.captureTargets.size() > 1))
 		return true;
 	else
 		return false;
 }
 
-inline bool Board::isInBounds(int x, int y)
+bool Board::isInBounds(int x,int y)
 {
 	return x < row  && x >= 0 && y < col && y >= 0;
 }
 
-inline bool Board::isEmpty(int x, int y)
-{
-	return grid[x][y] == 0;
-}
 
 void Board::printBoard() {
 	cout << "    ";
@@ -122,14 +49,15 @@ void Board::printBoard() {
 		cout << (i + 1) << " |";
 
 		for (int j = 0; j < col; j++) {
-			if (grid[i][j] == 0) {
+			unordered_map<Move, int>::const_iterator it = grid.find(Move(i, j));
+			if (it->second == 0) {
 				cout << "   |";
 			}
-			else if (grid[i][j] > 0) {
-				cout << " " << grid[i][j] << " |";
+			else if (it->second > 0) {
+				cout << " " << it->second << " |";
 			}
-			else if (grid[i][j] < 0) {
-				cout << "" << grid[i][j] << " |";
+			else if (it->second < 0) {
+				cout << "" << it->second << " |";
 			}
 		}
 		cout << endl;
@@ -142,11 +70,68 @@ void Board::printBoard() {
 	cout << endl << endl;
 }
 
-void Board::printMoves()
+//void Board::printMoves()
+//{
+//	for (int i = move.size(); i > 0; i--)
+//	{
+//		cout << "Move : " << i << " x: " << move.top().first + 1 << " y: " << move.top().second + 1 << endl;
+//		move.pop();
+//	}
+//}
+
+unordered_map<string, int> Board::getNeighbours(Move move)
 {
-	for (int i = move.size(); i > 0; i--)
+	unordered_map<string, int> neighbours;
+
+	if (isInBounds(move.x + 1, move.y))
 	{
-		cout << "Move : " << i << " x: " << move.top().first + 1 << " y: " << move.top().second + 1 << endl;
-		move.pop();
+		neighbours.emplace("Bottom", grid.at(move));
 	}
+
+	if (isInBounds(move.x - 1, move.y))
+	{
+		neighbours.emplace("Top", grid.at(move));
+	}
+
+	if (isInBounds(move.x, move.y + 1))
+	{
+		neighbours.emplace("Right", grid.at(move));
+	}
+
+	if (isInBounds(move.x, move.y - 1))
+	{
+		neighbours.emplace("Left", grid.at(move));
+	}
+
+	return neighbours;
+
 }
+
+unordered_map<string, int> Board::getTargets(Move move)
+{
+	unordered_map<string, int> neighbours;
+
+	if (isInBounds(move.x += 1, move.y) && (grid.at(move) < 6))
+	{
+		neighbours.emplace("Bottom", grid.at(move));
+	}
+
+	if (isInBounds(move.x -= 2, move.y) && (grid.at(move) < 6))
+	{
+		neighbours.emplace("Top", grid.at(move));
+	}
+
+	if (isInBounds(move.x, move.y += 1) && (grid.at(move) < 6))
+	{
+		neighbours.emplace("Right", grid.at(move));
+	}
+
+	if (isInBounds(move.x, move.y -= 2) && (grid.at(move) < 6))
+	{
+		neighbours.emplace("Left", grid.at(move));
+	}
+
+	return neighbours;
+
+}
+

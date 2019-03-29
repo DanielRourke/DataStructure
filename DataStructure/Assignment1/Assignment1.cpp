@@ -13,10 +13,9 @@ int main()
 	int row, col;
 	cin >> row >> col;
 
-	Board board(row, col);
-	//board.play();
-	board.randomPlay();
-	board.printMoves();
+	Game game(row, col);
+	game.play();
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

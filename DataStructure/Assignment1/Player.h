@@ -4,14 +4,13 @@ class Player
 {
 
 protected:
-	bool firstPlayer;
+	int id;
 	string name;
 public:
-	Player() : name("Blank Player"), firstPlayer(true) {}
-	Player ( bool p , string n = "Player") :  firstPlayer(p), name(n) {}
-	//virtual Move getMove(Move m, Board *b) = 0;
-	virtual void getMove(int& x, int& y, Board *b, list<int> rMoves) = 0;
-	bool isFirstPlayer() { return firstPlayer; }
+	Player() : name("Blank Player") {}
+	Player ( int i , string n = "Player") :  id(id), name(n) {}
+	virtual Move getMove(const Board &b, const vector<int> &rMoves) = 0;
+	int getID() { return id; }
 	string getName() { return name; }
 	virtual ~Player() {};
 };

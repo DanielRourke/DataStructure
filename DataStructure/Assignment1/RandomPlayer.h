@@ -5,19 +5,13 @@ class RandomPlayer :
 {
 public:
 	RandomPlayer() : Player() {};
-	RandomPlayer(bool position, string name = "Random Player") : Player(position, name) {};
+	RandomPlayer(int id, string name = "Random : Player " ) : Player(id, name + to_string(id)) {};
 	~RandomPlayer() {} ;
-	//Move getMove(Move m, Board *b = NULL)
-	//{
-	//	cout << "Input your move with row and column numbers:" << endl;
-	//	cin >> m.x >> m.y;
-	//	return m;
-	//}
-	void getMove(int& x, int& y, Board *b, stack<pair<int, int>> *pMoves)
+	Move getMove(const Board &board, const vector<int> &rMoves)
 	{
-		cout << "Input your move with row and column numbers:" << endl;
-		cin >> x >> y;
+		return rMoves[rand() % rMoves.size()];
 	}
+
 };
 
 

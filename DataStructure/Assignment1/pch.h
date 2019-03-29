@@ -16,52 +16,57 @@
 #include <algorithm>
 #include <cstdlib>
 #include <string>
+#include <unordered_map>
+#include <sstream>
+
 using namespace std;
 
+#include "Neighbour.h"
+#include "Move.h"
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "Board.h"
 #include "Game.h"
 #include "time.h"
 
-struct Neighbour {
-	string first;
-	int pipCount;
-};
-
-struct Move
+class Move
 {
-	//Move(char c, int score = 0) : x(0), y(0), s(c), score(score) {}
-	//Move(int a = 0, int b = 0, char c = ' ') : x(a), y(b), s(c), score(0) {}
-	//Move(const Move& move) : x(move.x), y(move.y), s(move.s), score(move.score) {}
+public:
 	Move(int a = 0, int b = 0) : x(a), y(b) {}
+	~Move() {};
+
 	int x;
 	int y;
-	//char s;
-	//int score;
-};
+	int score;
+	unordered_map<string, int> captureTargets;
 
 
-struct Number
-{
-	int result;
-	Number() : result(0) {}
-	int getNumber(int min, int max)
+	int captureTotal();
+	void getNeighbours(const Board &board);
+	bool operator==(const Move &m)
 	{
-		do
-		{
-			cin >> result;
-			if (cin.fail())
-			{
-				cin.clear();
-				cin.ignore(1000, '\n');
-				cout << "Invalid Input";
-				result = 0;
-			}
-		} while (result < min || result > max);
-
-		return result;
+		return captureTargets == m.captureTargets;
 	}
 };
+
+
+int Move::captureTotal()
+{
+	int count = 0;
+	for (auto& neighbour : captureTargets)
+	{
+		count += neighbour.second;
+	}
+	return count;
+}
+
+void Move::getNeighbours(const Board &board)
+{
+	captureTargets = board.getNeighbours(*this);
+}
+
+
+
+
 
 #endif //PCH_H
