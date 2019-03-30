@@ -1,4 +1,10 @@
 #pragma once
+#include "Neighbour.h"
+#include "Move.h"
+#include "Player.h"
+#include "HumanPlayer.h"
+#include "Board.h"
+
 class Game
 {
 private:

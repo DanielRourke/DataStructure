@@ -1,4 +1,6 @@
 #include "pch.h"
+#include "Board.h"
+
 
 Board::Board(int r, int c) {
 	row = r;
@@ -11,7 +13,7 @@ Board::Board(int r, int c) {
 		}
 }
 
-Board::Board(const Board& cboard) 
+Board::Board(Board& cboard) 
 {
 	row = cboard.row;
 	col = cboard.col;

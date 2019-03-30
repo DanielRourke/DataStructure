@@ -1,4 +1,4 @@
-// Assignment1.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// Assignment1-rework.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include "pch.h"
@@ -6,15 +6,22 @@
 
 int main()
 {
-	srand(time(NULL));
+	srand((int)time(NULL));
 	int row, col;
-	do
-	{
+
+	//do
+	//{
+	//	cout << "Input the size of board, say (3 3), (3 5) or (5 5): " << endl;
+
+	//	cin >> row >> col;
+
+	//} while ((row == 3 && (col == 3 || col == 5)) || (row == 5 && col == 5));
+
+
 		cout << "Input the size of board, say (3 3), (3 5) or (5 5): " << endl;
 
 		cin >> row >> col;
 
-	} while ((row == 3 && (col == 3 || col == 5)) || (row == 5 && col == 5));
 
 
 	Game game(row, col);

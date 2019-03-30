@@ -24,8 +24,4 @@ using namespace std;
 
 #include "time.h"
 
-
-
-
-
 #endif //PCH_H

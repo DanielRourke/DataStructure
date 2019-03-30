@@ -9,7 +9,7 @@ private:
 public:
 	~Board() {}
 	Board(int r, int c);
-	Board(const Board& cboard);
+	Board(Board& cboard);
 	void printBoard();
 	bool isValidMove(Move move);
 	bool isInBounds(int x, int y);
