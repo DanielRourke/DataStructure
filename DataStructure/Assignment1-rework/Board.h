@@ -6,6 +6,7 @@ class Board
 private:
 	int row, col;
 	unordered_map<int, int> grid;
+	list<Move> remaingMoves;
 public:
 	Board();
 	~Board();
@@ -18,8 +19,13 @@ public:
 	void addMove(int, int);
 	void addMove(Move);
 	unordered_map<string, int> getNeighbours(Move move);
-	unordered_map<string, int> getTargets(Move move) const;
+	map<string, int> getTargets(Move move) const;
 	bool isInBounds(int x, int y) const;
+	int captureTargets(Move);
+	int countTargets(Move) const;
+	Move getMove(int) const;
+	Move getRandomMove() const;
+	bool isGameOver();
 };
 
 
@@ -31,6 +37,12 @@ Board::Board(int r, int c) {
 	{
 		grid.emplace( i , 0);
 	}
+
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+		{
+			remaingMoves.push_back(Move(i, j));
+		}
 }
 
 
@@ -145,10 +157,6 @@ inline void Board::printBoard()
 	cout << (char)188 << endl;
 }
 
-//inline bool Board::isValidMove(int k) const
-//{
-//	return k / col < row  && k / col >= 0 && k % col < col && k % col >= 0 && grid.at(k) == 0;
-//}
 
 inline bool Board::isValidMove(Move move) const
 {
@@ -161,38 +169,35 @@ inline int Board::boardMove(int i, int j) const
 	return i * col + j;
 }
 
-//inline void Board::addMove(int k, int p)
-//{
-//	if (p == 0)
-//	{
-//		grid[k] += 1;
-//	}
-//	else if (p == 1)
-//	{
-//		grid[k] -= 1;
-//	}
-//	
-//}
+
+inline Move Board::getMove(int k) const
+{
+	return  Move(k / col, k % col);
+}
 
 inline void Board::addMove(Move move)
 {
+	int pipCount = 1;
+	if (captureTargets(move) > 0)
+	{
+		pipCount = captureTargets(move);
+	}
 	if (move.player == 0)
 	{
-		grid[move.x * col + move.y] += 1;
+		grid[move.x * col + move.y] = pipCount;
 	}
 	else if (move.player == 1)
 	{
-		grid[move.x * col + move.y] -= 1;
+		grid[move.x * col + move.y] = -pipCount;
 	}
 
+	remaingMoves.remove(move);
 }
 
 
-
-
-unordered_map<string, int> Board::getTargets(Move move) const
+map<string, int> Board::getTargets(Move move) const
 {
-	unordered_map<string, int> targets;
+	map<string, int> targets;
 
 	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && grid.at((move.x + 1) * col + move.y) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
 	{
@@ -216,4 +221,60 @@ unordered_map<string, int> Board::getTargets(Move move) const
 
 	return targets;
 
+}
+
+inline int Board::captureTargets(Move move)
+{
+	int pipCount = countTargets(move );
+
+	for (auto& target : move.captureTargets)
+	{
+		if (target.first == "Top")
+		{
+			grid.at((move.x - 1) * col + move.y) = 0;
+			remaingMoves.push_back(Move(move.x - 1, move.y));
+		}
+		else if (target.first == "Bottom")
+		{
+			grid.at((move.x + 1) * col + move.y) = 0;
+			remaingMoves.push_back(Move(move.x + 1, move.y));
+		}
+		else if (target.first == "Right")
+		{
+			grid.at(move.x  * col + (move.y + 1)) = 0;
+			remaingMoves.push_back(Move(move.x , move.y + 1));
+		}
+		else if (target.first == "Left")
+		{
+			grid.at(move.x * col + (move.y - 1)) = 0;
+			remaingMoves.push_back(Move(move.x , move.y - 1));
+		}
+	}
+
+	return pipCount;
+}
+
+inline int Board::countTargets(Move move) const
+{
+	int pipCount = 0;
+
+	for (auto& target : move.captureTargets)
+	{
+		pipCount += abs(target.second);
+	}
+
+	return pipCount;
+}
+
+inline Move Board::getRandomMove() const
+{
+	list<Move>::const_iterator moveIt = remaingMoves.begin();
+	advance(moveIt, rand() % remaingMoves.size());
+	return *moveIt;
+
+}
+
+inline bool Board::isGameOver()
+{
+	return remaingMoves.size() > 0;
 }

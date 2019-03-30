@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "Board.h"
 #include "HumanPlayer.h"
+#include "RandomPlayer.h"
+
 class Game
 {
 private:
@@ -17,14 +19,8 @@ public:
 
 Game::Game(int row = 3, int col = 3) : gameBoard(row, col)
 {
-	//for (int i = 0; i < row; i++)
-	//	for (int j = 0; j < col; j++)
-	//	{
-	//		remaingMoves.push_back(Move(i, j));
-	//	}
-
-	players[0] = new HumanPlayer( 0);
-	players[1] = new HumanPlayer( 1);
+	players[0] = new RandomPlayer( 0);
+	players[1] = new RandomPlayer( 1);
 }
 
 
@@ -35,14 +31,13 @@ Game::~Game()
 inline void Game::play()
 {
 	int p = 0;
+	Move currentMove;
 	do
 	{
 		gameBoard.printBoard();
-		//int move = players[p]->getMove(gameBoard);
-		//gameBoard.addMove(move, p);
 		gameBoard.addMove(players[p]->getMove(gameBoard));
 		p = ++p % 2;
-	} while (true);
+	} while (gameBoard.isGameOver());
 
 
 }

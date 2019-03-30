@@ -7,18 +7,22 @@ public:
 	int x;
 	int y;
 	int player;
-	unordered_map<string, int> captureTargets;
+	map<string, int> captureTargets;
 	Move(int a = 0, int b = 0, int p = 0) : x(a), y(b), player(p) {}
 	~Move();
 	//int captureTotal();
 	//void getNeighbours(const Board &board);
-	bool operator==(Move &m){	return x == m.x && y == m.y;	}
+	bool operator==(Move m)
+	{	
+		return (x == m.x) && (y == m.y);
+	}
 };
 
 
 Move::~Move()
 {
 }
+
 
 
 //inline int Move::captureTotal()

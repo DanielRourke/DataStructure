@@ -18,6 +18,8 @@
 #include <string>
 #include <unordered_map>
 #include <sstream>
+#include <cmath>
+#include <map>
 
 using namespace std;
 
