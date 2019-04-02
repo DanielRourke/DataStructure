@@ -18,13 +18,13 @@ int main()
 	//} while ((row == 3 && (col == 3 || col == 5)) || (row == 5 && col == 5));
 
 
-		cout << "Input the size of board, say (3 3), (3 5) or (5 5): " << endl;
+		//cout << "Input the size of board, say (3 3), (3 5) or (5 5): " << endl;
 
-		cin >> row >> col;
+		//cin >> row >> col;
 
 
 
-	Game game(row, col);
+	Game game(3, 3);
 	game.play();
 
 }

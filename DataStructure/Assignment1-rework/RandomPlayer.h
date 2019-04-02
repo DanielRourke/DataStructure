@@ -4,7 +4,7 @@ class RandomPlayer :
 	public Player
 {
 public:
-	RandomPlayer() : Player() {} ;
+	RandomPlayer() : Player() {};
 	RandomPlayer(int i, string name = "Random Player ") : Player(i, name += to_string(i)) {};
 	~RandomPlayer() {};
 	Move getMove(const Board &board)
@@ -12,7 +12,7 @@ public:
 
 		Move move = board.getRandomMove();
 		move.player = this->id;
-		
+
 		map<string, int> targets = board.getTargets(move);
 
 		if (targets.size() == 2)
@@ -24,39 +24,36 @@ public:
 			int total = 0;
 
 
-		if (id == 0)
-		{
-			do
+			if (id == 0)
 			{
-				int value = 6;
-				map<string, int>::const_iterator lowest = targets.begin();
-				map<string, int>::const_iterator target;
-				for (target = targets.begin(); target != targets.end(); target++)
+				do
 				{
-					if (target->second < value && (total + (abs(target->second))) <= 6)
+					map<string, int>::const_iterator lowest = targets.begin();
+					map<string, int>::const_iterator target;
+					for (target = targets.begin(); target != targets.end(); target++)
 					{
-						lowest = target;
-						value = target->second;
+						if (target->second <= lowest->second && (total + abs(target->second)) <= 6)
+						{
+							lowest = target;
+						}
 					}
-				}
-				if (total + abs(lowest->second) <= 6)
-				{
-					total += abs(value);
-					move.captureTargets.emplace(lowest->first, lowest->second);
-				}
-				else
-				{
-                   system("pause");
-				}
-				targets.erase(lowest);
-				if (total > 6 || total < -6)
-				{
-					
-				}
-			} while (targets.size() != 0 && (move.captureTargets.size() < 2 ||
-				(targets.begin()->second < 0 && (total + abs(targets.begin()->second) <= 6)) ||
-				(++targets.begin()->second < 0 && (total + abs(++targets.begin()->second))) ));
-		}
+					if (total + (abs(lowest->second)) <= 6)
+					{
+						total += (total + (abs(lowest->second)));
+						move.captureTargets.emplace(lowest->first, lowest->second);
+						cout << " total " << total << endl;
+					}
+					else
+					{
+
+					}
+					targets.erase(lowest);
+
+				} while (targets.size() != 0 && (move.captureTargets.size() < 2 ||
+					(targets.begin()->second < 0 && (total + abs(targets.begin()->second) <= 6)) ||
+					(++targets.begin()->second < 0 && (total + abs(++targets.begin()->second)))));
+
+			}
 
 
 
@@ -64,37 +61,63 @@ public:
 			{
 				do
 				{
-					int value = -6;
 					map<string, int>::const_iterator highest = targets.begin();
 					map<string, int>::const_iterator target;
 					for (target = targets.begin(); target != targets.end(); target++)
 					{
-						if (target->second > value && (total + (abs(target->second))) <= 6)
+						if (target->second >= highest->second && (total + abs(target->second)) <= 6)
 						{
 							highest = target;
-							value = target->second;
 						}
 
 					}
-					if (total + abs(highest->second) <= 6)
+					if ((total + abs(highest->second)) <= 6)
 					{
-						total += abs(value);
+						total = total + abs(highest->second);
 						move.captureTargets.emplace(highest->first, highest->second);
+
 					}
 					else
 					{
-						system("pause");
+
 					}
+
 
 					targets.erase(highest);
 
 
-				} while (targets.size() != 0 && ( move.captureTargets.size() < 2
+				} while (targets.size() != 0 && (move.captureTargets.size() < 2
 					|| (targets.begin()->second > 0 && (total + abs(targets.begin()->second) <= 6)) ||
 					(++targets.begin()->second > 0 && (total + abs(++targets.begin()->second)))));
 			}
 
 
+		}
+
+		if (move.captureTotal() > 6)
+		{
+			move.captureTargets.clear();
+			move.captureTargets = board.getTargets(move);
+			map<string, int>::const_iterator highest;
+			map<string, int>::const_iterator target;
+
+			while (move.captureTotal() > 6)
+			{
+				for (target = move.captureTargets.begin(), highest = move.captureTargets.begin(); target != targets.end(); target++)
+				{
+					if (target->second > highest->second)
+					{
+						highest = target;
+					}
+
+				}
+				move.captureTargets.erase(highest);
+			}
+		
+			if (move.captureTargets.size() < 2)
+			{
+				move.captureTargets.clear();
+			}
 		}
 		
 		return move;

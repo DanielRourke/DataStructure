@@ -199,22 +199,22 @@ map<string, int> Board::getTargets(Move move) const
 {
 	map<string, int> targets;
 
-	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && grid.at((move.x + 1) * col + move.y) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
+	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x + 1) * col + move.y)) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
 	{
 		targets.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
 	}
 
-	if (move.x - 1 < row  && move.x - 1 >= 0 && move.y < col && move.y >= 0 && grid.at((move.x - 1) * col + move.y) < 6 && grid.at((move.x - 1) * col + move.y) != 0)
+	if (move.x - 1 < row  && move.x - 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x - 1) * col + move.y)) < 6 && grid.at((move.x - 1) * col + move.y) != 0)
 	{
 		targets.emplace("Top", grid.at((move.x - 1) * col + move.y));
 	}
 
-	if (move.x < row  && move.x >= 0 && move.y + 1 < col && move.y + 1 >= 0 && grid.at(move.x * col + (move.y + 1)) < 6 && grid.at(move.x * col + (move.y + 1)) != 0)
+	if (move.x < row  && move.x >= 0 && move.y + 1 < col && move.y + 1 >= 0 && abs(grid.at(move.x * col + (move.y + 1))) < 6 && grid.at(move.x * col + (move.y + 1)) != 0)
 	{
 		targets.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
 	}
 
-	if (move.x < row  && move.x >= 0 && move.y - 1 < col && move.y - 1 >= 0 && grid.at(move.x * col + (move.y - 1)) < 6 && grid.at(move.x * col + (move.y - 1)) != 0)
+	if (move.x < row  && move.x >= 0 && move.y - 1 < col && move.y - 1 >= 0 && abs(grid.at(move.x * col + (move.y - 1))) < 6 && grid.at(move.x * col + (move.y - 1)) != 0)
 	{
 		targets.emplace("Left", grid.at(move.x * col + (move.y - 1)));
 	}

@@ -10,7 +10,7 @@ public:
 	map<string, int> captureTargets;
 	Move(int a = 0, int b = 0, int p = 0) : x(a), y(b), player(p) {}
 	~Move();
-	//int captureTotal();
+	int captureTotal();
 	//void getNeighbours(const Board &board);
 	bool operator==(Move m)
 	{	
@@ -25,15 +25,15 @@ Move::~Move()
 
 
 
-//inline int Move::captureTotal()
-//{
-//	int count = 0;
-//	for (auto& neighbour : captureTargets)
-//	{
-//		count += neighbour.second;
-//	}
-//	return count;
-//}
+inline int Move::captureTotal()
+{
+	int count = 0;
+	for (auto& neighbour : captureTargets)
+	{
+		count += abs(neighbour.second);
+	}
+	return count;
+}
 
 //inline void Move::getNeighbours(const Board &board)
 //{
