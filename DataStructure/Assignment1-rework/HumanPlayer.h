@@ -10,38 +10,41 @@ public:
 
 	Move getMove(const Board &board)
 	{
-		cout << name << endl;
 		Move move;
-		move.player = this->id;
-		do
-		{
-			cout << "Input your move with row and column numbers:" << endl;
- 			cin >> move.x >> move.y;
-			if (cin.fail())
-			{
-				cin.clear();
-				cin.ignore(1000, '\n');
-				cout << "Invalid Input";
-			}
+		move = getMoveInput();
 
-			move.x--;
-			move.y--;
-
-		} while (!board.isValidMove(move));
-
-
-		map<string, int> targets = board.getTargets(move);
-
-
-
+		move.captureTargets.clear();
+		list<Neighbour>targets = board.getTargets(move);
 		cout << endl;
 		
 
-		string input;
-		bool targetsValid;
-		cin.clear();
-		cin.ignore();
-		if (targets.size() > 1)
+		if (targets.size() == 2)
+		{
+			move.captureTargets = targets;
+		}
+		else if (targets.size() > 2)
+		{
+			do
+			{
+	
+
+				
+					for (auto& target : targets)
+					{
+						if (target.direction.compare(input) == 0)
+						{
+
+						}
+				}
+
+
+			} while (true);
+
+		}
+
+
+
+		/*if (targets.size() > 1)
 		{
 			move.captureTargets = targets;
 			do
@@ -52,7 +55,7 @@ public:
 				{
 					for (auto& target : targets)
 					{
-						cout << target.first << " : " << target.second << " ";
+						cout << target.direction << " : " << target.pipCount << " ";
 					}
 					move.captureTargets.clear();
 					cout << "Enter two or more Directions to capture" << endl;
@@ -74,7 +77,7 @@ public:
 					}
 				}
 
-			} while (move.captureTargets.size() < 2 || targetsValid == false || board.countTargets(move) > 6);
+			} while (move.captureTargets.size() < 2 || targetsValid == false || board.countTargets(move) > 6);*/
 		}
 
 		//for (auto& target : move.captureTargets)
@@ -86,6 +89,53 @@ public:
 
 
 		return move;
+	}
+
+	Move getMoveInput(const Board &board)
+	{
+		cout << name << endl;
+		Move move;
+		move.player = this->id;
+		do
+		{
+			cout << "Input your move with row and column numbers:" << endl;
+			cin >> move.x >> move.y;
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(1000, '\n');
+				cout << "Invalid Input";
+			}
+
+			move.x--;
+			move.y--;
+
+		} while (!board.isValidMove(move));
+
+		return move;
+	}
+
+	Move getTargetsInput(Move move)
+	{
+		string input;
+		cin.clear();
+		cin.ignore();
+
+		for (auto& target : targets)
+		{
+			cout << target.direction << " : " << target.pipCount << " ";
+		}
+
+		cout << "Enter two or more Directions to capture" << endl;
+		getline(cin, input);
+		stringstream captureTargets(input);
+		
+		
+		while (captureTargets >> input)
+		{
+			if(!move.add()
+				
+		}
 	}
 
 };

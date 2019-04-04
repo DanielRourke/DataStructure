@@ -13,7 +13,7 @@ public:
 		Move move = board.getRandomMove();
 		move.player = this->id;
 
-		map<string, int> targets = board.getTargets(move);
+		list<Neighbour>targets = board.getTargets(move);
 
 		if (targets.size() == 2)
 		{
@@ -94,31 +94,31 @@ public:
 
 		}
 
-		if (move.captureTotal() > 6)
-		{
-			move.captureTargets.clear();
-			move.captureTargets = board.getTargets(move);
-			map<string, int>::const_iterator highest;
-			map<string, int>::const_iterator target;
+		//if (move.captureTotal() > 6)
+		//{
+		//	move.captureTargets.clear();
+		//	move.captureTargets = board.getTargets(move);
+		//	map<string, int>::const_iterator highest;
+		//	map<string, int>::const_iterator target;
 
-			while (move.captureTotal() > 6)
-			{
-				for (target = move.captureTargets.begin(), highest = move.captureTargets.begin(); target != targets.end(); target++)
-				{
-					if (target->second > highest->second)
-					{
-						highest = target;
-					}
+		//	while (move.captureTotal() > 6)
+		//	{
+		//		for (target = move.captureTargets.begin(), highest = move.captureTargets.begin(); target != targets.end(); target++)
+		//		{
+		//			if (target->second > highest->second)
+		//			{
+		//				highest = target;
+		//			}
 
-				}
-				move.captureTargets.erase(highest);
-			}
-		
-			if (move.captureTargets.size() < 2)
-			{
-				move.captureTargets.clear();
-			}
-		}
+		//		}
+		//		move.captureTargets.erase(highest);
+		//	}
+		//
+		//	if (move.captureTargets.size() < 2)
+		//	{
+		//		move.captureTargets.clear();
+		//	}
+		//}
 		
 		return move;
 

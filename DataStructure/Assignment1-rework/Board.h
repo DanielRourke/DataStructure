@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Move.h"
+#include "Neighbour.h"
 class Board
 {
 private:
@@ -19,7 +20,7 @@ public:
 	void addMove(int, int);
 	void addMove(Move);
 	unordered_map<string, int> getNeighbours(Move move);
-	map<string, int> getTargets(Move move) const;
+	list<Neighbour> getTargets(Move move) const;
 	bool isInBounds(int x, int y) const;
 	int captureTargets(Move);
 	int countTargets(Move) const;
@@ -195,29 +196,41 @@ inline void Board::addMove(Move move)
 }
 
 
-map<string, int> Board::getTargets(Move move) const
+list<Neighbour> Board::getTargets(Move move) const
 {
-	map<string, int> targets;
+	list<Neighbour> targets;
 
 	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x + 1) * col + move.y)) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
 	{
-		targets.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
+		//targets.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
+		targets.push_back(Neighbour("Bottom", grid.at((move.x + 1) * col + move.y)));
 	}
 
 	if (move.x - 1 < row  && move.x - 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x - 1) * col + move.y)) < 6 && grid.at((move.x - 1) * col + move.y) != 0)
 	{
-		targets.emplace("Top", grid.at((move.x - 1) * col + move.y));
+		//targets.emplace("Top", grid.at((move.x - 1) * col + move.y));
+		targets.push_back(Neighbour("Top", grid.at((move.x - 1) * col + move.y)));
 	}
 
 	if (move.x < row  && move.x >= 0 && move.y + 1 < col && move.y + 1 >= 0 && abs(grid.at(move.x * col + (move.y + 1))) < 6 && grid.at(move.x * col + (move.y + 1)) != 0)
 	{
-		targets.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
+		//targets.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
+		targets.push_back(Neighbour("Right", grid.at(move.x  * col + (move.y + 1))));
 	}
 
 	if (move.x < row  && move.x >= 0 && move.y - 1 < col && move.y - 1 >= 0 && abs(grid.at(move.x * col + (move.y - 1))) < 6 && grid.at(move.x * col + (move.y - 1)) != 0)
 	{
-		targets.emplace("Left", grid.at(move.x * col + (move.y - 1)));
+		//targets.emplace("Left", grid.at(move.x * col + (move.y - 1)));
+		targets.push_back(Neighbour("Left", grid.at(move.x * col + (move.y - 1))));
 	}
+
+	targets.sort(NeighbourAbsComparator());
+	while (targets.front + targets.back > 6 && targets.size() > 1)
+	{
+		targets.pop_back();
+		targets.sort(NeighbourAbsComparator());
+	}
+	targets.sort();
 
 	return targets;
 
