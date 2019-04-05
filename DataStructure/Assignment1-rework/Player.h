@@ -8,7 +8,7 @@ protected:
 	string name;
 public:
 	Player() : name("Blank Player") {}
-	Player(int i, string n = "Player") : id(i), name(n) {}
+	Player(int i, string n = "Player") : id(i), name(n += to_string(i +1)) {}
 	//virtual int getMove(const Board &board) = 0;
 	virtual Move getMove(const Board &board) = 0;
 	int getID() { return id; }

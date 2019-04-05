@@ -5,7 +5,7 @@ class RandomPlayer :
 {
 public:
 	RandomPlayer() : Player() {};
-	RandomPlayer(int i, string name = "Random Player ") : Player(i, name += to_string(i)) {};
+	RandomPlayer(int i, string name = "Random Player ") : Player(i, name) {};
 	~RandomPlayer() {};
 	Move getMove(const Board &board)
 	{

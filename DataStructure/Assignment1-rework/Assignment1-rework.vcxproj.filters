@@ -39,6 +39,9 @@
     <ClInclude Include="Neighbour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MiniMaxPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

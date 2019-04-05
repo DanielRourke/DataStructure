@@ -19,7 +19,7 @@ public:
 	bool isTargetsValid(list<Neighbour> targets) const;
 	bool isEmptyMove(Move move) const;
 	int boardMove(int, int) const;
-	void addMove(int, int);
+	//void addMove(int, int);
 	void addMove(Move);
 	unordered_map<string, int> getNeighbours(Move move);
 	list<Neighbour> getTargets(Move move) const;
@@ -28,7 +28,10 @@ public:
 	Move getMove(int) const;
 	Move getRandomMove() const;
 	list<Move> getRemainingMoves() const;
-	bool isGameOver();
+	int getScore();
+
+
+	//bool isGameOver();
 };
 
 Board::Board(int r, int c) {
@@ -327,6 +330,23 @@ inline Move Board::getRandomMove() const
 inline list<Move> Board::getRemainingMoves() const
 {
 	return remainingMoves;
+}
+
+inline int Board::getScore()
+{
+	int total = 0;
+	for (auto& cell : grid)
+	{
+		if (cell.second > 0)
+		{
+			total++;
+		}
+		else if (cell.second < 0)
+		{
+			total--;
+		}
+	}
+	return total;
 }
 
 

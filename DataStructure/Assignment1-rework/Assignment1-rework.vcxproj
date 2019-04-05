@@ -154,6 +154,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="MiniMaxPlayer.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="Neighbour.h" />
     <ClInclude Include="pch.h" />

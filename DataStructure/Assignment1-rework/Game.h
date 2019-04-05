@@ -14,13 +14,13 @@ public:
 	~Game();
 	void play();
 	void setMode(int);
+	void determineWinner();
 };
 
 Game::Game(int row = 3, int col = 3, int mode = 0) : gameBoard(row, col)
 {
 	setMode(mode);
 }
-
 
 Game::~Game()
 {}
@@ -36,8 +36,8 @@ inline void Game::play()
 		p = ++p % 2;
 	} while (gameBoard.getRemainingMoves().size() > 0);
 
-
-
+	gameBoard.printBoard();
+	determineWinner();
 }
 
 inline void Game::setMode(int playerCombo)
@@ -58,5 +58,18 @@ inline void Game::setMode(int playerCombo)
 		players[1] = new RandomPlayer(1);
 		cout << playerCombo << endl;
 		break;
+	}
+}
+
+inline void Game::determineWinner()
+{
+	int score = gameBoard.getScore();
+	if (score > 0)
+	{
+		cout << players[0]->getName() << " Wins by " << score << endl;
+	}
+	else if (score < 0)
+	{
+		cout << players[1]->getName() << " Wins by " << score << endl;
 	}
 }

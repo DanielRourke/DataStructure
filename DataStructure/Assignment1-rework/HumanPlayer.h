@@ -6,7 +6,7 @@ class HumanPlayer :
 {
 public:
 	HumanPlayer() : Player() {};
-	HumanPlayer(int i, string name = "Human Player ") : Player(i, name += to_string(i)) {};
+	HumanPlayer(int i, string name = "Human Player ") : Player(i, name) {};
 	~HumanPlayer() {};
 	Move getMove(const Board &board)
 	{
