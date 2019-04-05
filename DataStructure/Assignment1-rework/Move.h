@@ -13,7 +13,7 @@ public:
 	~Move();
 	int captureTotal();
 	//void getNeighbours(const Board &board);
-	bool operator==(Move m)
+	bool operator==(Move m) const
 	{	
 		return (x == m.x) && (y == m.y);
 	}
@@ -38,13 +38,13 @@ Move::~Move()
 }
 
 
-
+//
 inline int Move::captureTotal()
 {
 	int count = 0;
 	for (auto& neighbour : captureTargets)
 	{
-		count += abs(neighbour.second);
+		count += abs(neighbour.pipCount);
 	}
 	return count;
 }
@@ -53,3 +53,5 @@ inline int Move::captureTotal()
 //{
 //	captureTargets = board.getNeighbours(*this);
 //}
+
+

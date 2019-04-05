@@ -1,13 +1,12 @@
 #pragma once
 #include "pch.h"
 #include "Move.h"
-#include "Neighbour.h"
 class Board
 {
 private:
 	int row, col;
 	unordered_map<int, int> grid;
-	list<Move> remaingMoves;
+	list<Move> remainingMoves;
 public:
 	Board();
 	~Board();
@@ -16,6 +15,9 @@ public:
 	void printBoard();
 	//bool isValidMove(int move) const;
 	bool isValidMove(Move move) const;
+	bool isMoveRemaining(Move move) const;
+	bool isTargetsValid(list<Neighbour> targets) const;
+	bool isEmptyMove(Move move) const;
 	int boardMove(int, int) const;
 	void addMove(int, int);
 	void addMove(Move);
@@ -42,7 +44,7 @@ Board::Board(int r, int c) {
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < col; j++)
 		{
-			remaingMoves.push_back(Move(i, j));
+			remainingMoves.push_back(Move(i, j));
 		}
 }
 
@@ -159,9 +161,50 @@ inline void Board::printBoard()
 }
 
 
-inline bool Board::isValidMove(Move move) const
+inline bool Board::isTargetsValid(list<Neighbour> targets) const
+{
+	int pipCountTotal = 0;
+	for (auto& target : targets)
+	{
+		if (target.direction.compare("Top") != 0 && target.direction.compare("Bottom") != 0 && target.direction.compare("Right") != 0 && target.direction.compare("Left") != 0)
+		{
+			return false;
+		}
+		pipCountTotal += abs(target.pipCount);
+	}
+
+
+	if (pipCountTotal > 6)
+	{
+		return false;
+	}
+
+
+	return true;
+}
+
+inline bool Board::isEmptyMove(Move move) const
 {
 	return  move.x < row  && move.x >= 0 && move.y < col && move.y >= 0 && grid.at(move.x * col + move.y) == 0;
+}
+
+inline bool Board::isMoveRemaining(Move move) const
+{
+	for (auto& remainingMove : remainingMoves)
+	{
+		if (remainingMove == move && grid.at(move.x * col + move.y) == 0)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+inline bool Board::isValidMove(Move move) const
+{
+	return  (isEmptyMove(move) && isMoveRemaining(move) && isTargetsValid(move.captureTargets));
 }
 
 
@@ -192,7 +235,7 @@ inline void Board::addMove(Move move)
 		grid[move.x * col + move.y] = -pipCount;
 	}
 
-	remaingMoves.remove(move);
+	remainingMoves.remove(move);
 }
 
 
@@ -224,13 +267,17 @@ list<Neighbour> Board::getTargets(Move move) const
 		targets.push_back(Neighbour("Left", grid.at(move.x * col + (move.y - 1))));
 	}
 
-	targets.sort(NeighbourAbsComparator());
-	while (targets.front + targets.back > 6 && targets.size() > 1)
+
+	if (targets.size() >= 2)
 	{
-		targets.pop_back();
 		targets.sort(NeighbourAbsComparator());
+		while (abs(targets.front().pipCount) + abs(targets.back().pipCount) > 6 && targets.size() > 1)
+		{
+			targets.pop_back();
+			targets.sort(NeighbourAbsComparator());
+		}
+		targets.sort();
 	}
-	targets.sort();
 
 	return targets;
 
@@ -242,25 +289,25 @@ inline int Board::captureTargets(Move move)
 
 	for (auto& target : move.captureTargets)
 	{
-		if (target.first == "Top")
+		if (target.direction == "Top")
 		{
 			grid.at((move.x - 1) * col + move.y) = 0;
-			remaingMoves.push_back(Move(move.x - 1, move.y));
+			remainingMoves.push_back(Move(move.x - 1, move.y));
 		}
-		else if (target.first == "Bottom")
+		else if (target.direction == "Bottom")
 		{
 			grid.at((move.x + 1) * col + move.y) = 0;
-			remaingMoves.push_back(Move(move.x + 1, move.y));
+			remainingMoves.push_back(Move(move.x + 1, move.y));
 		}
-		else if (target.first == "Right")
+		else if (target.direction == "Right")
 		{
 			grid.at(move.x  * col + (move.y + 1)) = 0;
-			remaingMoves.push_back(Move(move.x , move.y + 1));
+			remainingMoves.push_back(Move(move.x , move.y + 1));
 		}
-		else if (target.first == "Left")
+		else if (target.direction == "Left")
 		{
 			grid.at(move.x * col + (move.y - 1)) = 0;
-			remaingMoves.push_back(Move(move.x , move.y - 1));
+			remainingMoves.push_back(Move(move.x , move.y - 1));
 		}
 	}
 
@@ -273,7 +320,7 @@ inline int Board::countTargets(Move move) const
 
 	for (auto& target : move.captureTargets)
 	{
-		pipCount += abs(target.second);
+		pipCount += abs(target.pipCount);
 	}
 
 	return pipCount;
@@ -281,13 +328,13 @@ inline int Board::countTargets(Move move) const
 
 inline Move Board::getRandomMove() const
 {
-	list<Move>::const_iterator moveIt = remaingMoves.begin();
-	advance(moveIt, rand() % remaingMoves.size());
+	list<Move>::const_iterator moveIt = remainingMoves.begin();
+	advance(moveIt, rand() % remainingMoves.size());
 	return *moveIt;
 
 }
 
 inline bool Board::isGameOver()
 {
-	return remaingMoves.size() > 0;
+	return remainingMoves.size() > 0;
 }

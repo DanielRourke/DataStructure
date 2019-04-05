@@ -7,7 +7,7 @@ public:
 	RandomPlayer() : Player() {};
 	RandomPlayer(int i, string name = "Random Player ") : Player(i, name += to_string(i)) {};
 	~RandomPlayer() {};
-	Move getMove(const Board &board)
+	/*Move getMove(const Board &board)
 	{
 
 		Move move = board.getRandomMove();
@@ -92,7 +92,7 @@ public:
 			}
 
 
-		}
+		}*/
 
 		//if (move.captureTotal() > 6)
 		//{
@@ -120,9 +120,9 @@ public:
 		//	}
 		//}
 		
-		return move;
+		//return move;
 
-	}
+	//}
 };
 
 

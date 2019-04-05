@@ -19,8 +19,8 @@ public:
 
 Game::Game(int row = 3, int col = 3) : gameBoard(row, col)
 {
-	players[0] = new RandomPlayer( 0);
-	players[1] = new RandomPlayer( 1);
+	players[0] = new HumanPlayer( 0);
+	players[1] = new HumanPlayer( 1);
 }
 
 

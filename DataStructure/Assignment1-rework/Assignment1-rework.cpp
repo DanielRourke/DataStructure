@@ -7,7 +7,7 @@
 int main()
 {
 	srand((int)time(NULL));
-	int row, col;
+	//int row, col;
 
 	//do
 	//{
