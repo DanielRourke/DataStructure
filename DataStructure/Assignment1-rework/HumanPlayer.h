@@ -10,9 +10,10 @@ public:
 	~HumanPlayer() {};
 	Move getMove(const Board &board)
 	{
+
+
 		cout << name << endl;
 		Move move;
-		move.player = this->id;
 		
 		do
 		{

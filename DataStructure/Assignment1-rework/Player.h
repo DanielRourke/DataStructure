@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Board.h"
+#include <queue>
 class Player
 {
 protected:
@@ -14,6 +15,7 @@ public:
 	int getID() { return id; }
 	string getName() { return name; }
 	virtual ~Player() {};
+
 };
 
 

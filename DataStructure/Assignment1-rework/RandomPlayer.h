@@ -13,7 +13,6 @@ public:
 		list<Move>::const_iterator moveIt = rMoves.begin();
 		advance(moveIt, rand() % rMoves.size());
 		Move move = *moveIt;
-		move.player = this->id;
 		
 		list<Neighbour>targets = board.getTargets(move);
 

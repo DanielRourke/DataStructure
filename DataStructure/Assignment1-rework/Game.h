@@ -3,6 +3,7 @@
 #include "Board.h"
 #include "HumanPlayer.h"
 #include "RandomPlayer.h"
+#include "MiniMaxPlayer.h"
 
 class Game
 {
@@ -27,13 +28,14 @@ Game::~Game()
 
 inline void Game::play()
 {
-	int p = 0;
+	int playerIndex = 0;
 	Move currentMove;
 	do
 	{
 		gameBoard.printBoard();
-		gameBoard.addMove(players[p]->getMove(gameBoard));
-		p = ++p % 2;
+		currentMove = players[playerIndex]->getMove(gameBoard);
+		gameBoard.addMove(currentMove, playerIndex);
+		playerIndex = ++playerIndex % 2;
 	} while (gameBoard.getRemainingMoves().size() > 0);
 
 	gameBoard.printBoard();
@@ -58,6 +60,9 @@ inline void Game::setMode(int playerCombo)
 		players[1] = new RandomPlayer(1);
 		cout << playerCombo << endl;
 		break;
+	case 4:
+		players[0] = new RandomPlayer(0);
+		players[1] = new MiniMaxPlayer(1);
 	}
 }
 

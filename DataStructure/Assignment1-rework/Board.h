@@ -20,7 +20,7 @@ public:
 	bool isEmptyMove(Move move) const;
 	int boardMove(int, int) const;
 	//void addMove(int, int);
-	void addMove(Move);
+	void addMove(Move, int);
 	unordered_map<string, int> getNeighbours(Move move);
 	list<Neighbour> getTargets(Move move) const;
 	int captureTargets(Move);
@@ -28,7 +28,7 @@ public:
 	Move getMove(int) const;
 	Move getRandomMove() const;
 	list<Move> getRemainingMoves() const;
-	int getScore();
+	int getScore()const;
 
 
 	//bool isGameOver();
@@ -48,6 +48,15 @@ Board::Board(int r, int c) {
 		{
 			remainingMoves.push_back(Move(i, j));
 		}
+}
+
+Board::Board(const Board& cboard)
+{
+	row = cboard.row;
+	col = cboard.col;
+
+	grid = cboard.grid;
+	remainingMoves = cboard.remainingMoves;
 }
 
 Board::Board()
@@ -215,7 +224,7 @@ inline Move Board::getMove(int k) const
 	return  Move(k / col, k % col);
 }
 
-inline void Board::addMove(Move move)
+inline void Board::addMove(Move move, int playerIndex)
 {
 	int pipCount = 1;
 
@@ -223,11 +232,11 @@ inline void Board::addMove(Move move)
 	{
 		pipCount = captureTargets(move);
 	}
-	if (move.player == 0)
+	if (playerIndex == 0)
 	{
 		grid[move.x * col + move.y] = pipCount;
 	}
-	else if (move.player == 1)
+	else if (playerIndex == 1)
 	{
 		grid[move.x * col + move.y] = -pipCount;
 	}
@@ -332,7 +341,7 @@ inline list<Move> Board::getRemainingMoves() const
 	return remainingMoves;
 }
 
-inline int Board::getScore()
+inline int Board::getScore() const
 {
 	int total = 0;
 	for (auto& cell : grid)

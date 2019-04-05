@@ -9,14 +9,13 @@ int main()
 	srand((int)time(NULL));
 	int row, col;
 
-	do
-	{
+	//do
+//	{
 		cout << "input the size of board, say (3 3), (3 5) or (5 5): " << endl;
 
 		cin >> row >> col;
 
-	} while ((row == 3 && (col != 3 && col != 5)) || (row == 5 && col != 5));
-
+	//} while ((row == 3 && (col != 3 && col != 5)) || (row == 5 && col != 5));
 
 
 	int gameMode = 0;
@@ -25,11 +24,12 @@ int main()
 		cout << "Pick Game Mode" << endl
 			<< "1. Human Vs Human" << endl
 			<< "2. Human Vs Random" << endl
-			<< "3. Random Vs Random" << endl;
+			<< "3. Random Vs Random" << endl
+		    << "4. Random Vs MiniMax" << endl;  
 
 		cin >> gameMode;
 
-	} while (gameMode < 1 || gameMode > 3);
+	} while (gameMode < 1 || gameMode > 4);
 	
 	Game game(row, col, gameMode);
 	game.play();
