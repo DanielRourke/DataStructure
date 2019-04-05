@@ -10,23 +10,20 @@ private:
 	Board gameBoard;
 	Player *players[2];
 public:
-	Game(int, int);
+	Game(int, int, int);
 	~Game();
 	void play();
+	void setMode(int);
 };
 
-
-
-Game::Game(int row = 3, int col = 3) : gameBoard(row, col)
+Game::Game(int row = 3, int col = 3, int mode = 0) : gameBoard(row, col)
 {
-	players[0] = new RandomPlayer(0);
-	players[1] = new RandomPlayer( 1);
+	setMode(mode);
 }
 
 
 Game::~Game()
-{
-}
+{}
 
 inline void Game::play()
 {
@@ -37,7 +34,29 @@ inline void Game::play()
 		gameBoard.printBoard();
 		gameBoard.addMove(players[p]->getMove(gameBoard));
 		p = ++p % 2;
-	} while (gameBoard.isGameOver());
+	} while (gameBoard.getRemainingMoves().size() > 0);
 
 
+
+}
+
+inline void Game::setMode(int playerCombo)
+{
+
+	switch (playerCombo)
+	{
+	case 1:
+		players[0] = new HumanPlayer(0);
+		players[1] = new HumanPlayer(1);
+		break;
+	case 2:
+		players[0] = new HumanPlayer(0);
+		players[1] = new RandomPlayer(1);
+		break;
+	case 3:
+		players[0] = new RandomPlayer(0);
+		players[1] = new RandomPlayer(1);
+		cout << playerCombo << endl;
+		break;
+	}
 }

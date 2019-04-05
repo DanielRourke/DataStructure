@@ -23,14 +23,13 @@ public:
 	void addMove(Move);
 	unordered_map<string, int> getNeighbours(Move move);
 	list<Neighbour> getTargets(Move move) const;
-	bool isInBounds(int x, int y) const;
 	int captureTargets(Move);
 	int countTargets(Move) const;
 	Move getMove(int) const;
 	Move getRandomMove() const;
+	list<Move> getRemainingMoves() const;
 	bool isGameOver();
 };
-
 
 Board::Board(int r, int c) {
 	row = r;
@@ -48,11 +47,9 @@ Board::Board(int r, int c) {
 		}
 }
 
-
 Board::Board()
 {
 }
-
 
 Board::~Board()
 {
@@ -160,7 +157,6 @@ inline void Board::printBoard()
 	cout << (char)188 << endl;
 }
 
-
 inline bool Board::isTargetsValid(list<Neighbour> targets) const
 {
 	int pipCountTotal = 0;
@@ -201,18 +197,15 @@ inline bool Board::isMoveRemaining(Move move) const
 	return false;
 }
 
-
 inline bool Board::isValidMove(Move move) const
 {
 	return  (isEmptyMove(move) && isMoveRemaining(move) && isTargetsValid(move.captureTargets));
 }
 
-
 inline int Board::boardMove(int i, int j) const
 {
 	return i * col + j;
 }
-
 
 inline Move Board::getMove(int k) const
 {
@@ -223,7 +216,6 @@ inline void Board::addMove(Move move)
 {
 	int pipCount = 1;
 
-	cout << move.player << " Player iD" << endl;
 	if (captureTargets(move) > 0)
 	{
 		pipCount = captureTargets(move);
@@ -239,7 +231,6 @@ inline void Board::addMove(Move move)
 
 	remainingMoves.remove(move);
 }
-
 
 list<Neighbour> Board::getTargets(Move move) const
 {
@@ -330,13 +321,12 @@ inline int Board::countTargets(Move move) const
 
 inline Move Board::getRandomMove() const
 {
-	list<Move>::const_iterator moveIt = remainingMoves.begin();
-	advance(moveIt, rand() % remainingMoves.size());
-	return *moveIt;
 
 }
 
-inline bool Board::isGameOver()
+inline list<Move> Board::getRemainingMoves() const
 {
-	return remainingMoves.size() > 0;
+	return remainingMoves;
 }
+
+

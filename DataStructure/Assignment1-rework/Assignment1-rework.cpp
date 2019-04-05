@@ -7,24 +7,31 @@
 int main()
 {
 	srand((int)time(NULL));
-	//int row, col;
+	int row, col;
 
-	//do
-	//{
-	//	cout << "Input the size of board, say (3 3), (3 5) or (5 5): " << endl;
+	do
+	{
+		cout << "input the size of board, say (3 3), (3 5) or (5 5): " << endl;
 
-	//	cin >> row >> col;
+		cin >> row >> col;
 
-	//} while ((row == 3 && (col == 3 || col == 5)) || (row == 5 && col == 5));
-
-
-		//cout << "Input the size of board, say (3 3), (3 5) or (5 5): " << endl;
-
-		//cin >> row >> col;
+	} while ((row == 3 && (col != 3 && col != 5)) || (row == 5 && col != 5));
 
 
 
-	Game game(3, 3);
+	int gameMode = 0;
+	do
+	{
+		cout << "Pick Game Mode" << endl
+			<< "1. Human Vs Human" << endl
+			<< "2. Human Vs Random" << endl
+			<< "3. Random Vs Random" << endl;
+
+		cin >> gameMode;
+
+	} while (gameMode < 1 || gameMode > 3);
+	
+	Game game(row, col, gameMode);
 	game.play();
 
 }

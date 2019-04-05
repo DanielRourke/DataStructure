@@ -9,10 +9,11 @@ public:
 	~RandomPlayer() {};
 	Move getMove(const Board &board)
 	{
-		Move move = board.getRandomMove();
+		list<Move> rMoves = board.getRemainingMoves();
+		list<Move>::const_iterator moveIt = rMoves.begin();
+		advance(moveIt, rand() % rMoves.size());
+		Move move = *moveIt;
 		move.player = this->id;
-
-		
 		
 		list<Neighbour>targets = board.getTargets(move);
 
@@ -22,17 +23,13 @@ public:
 		}
 		else if (targets.size() > 2)
 		{
-			cout << "Getting random move " << endl;
 			targets.sort(NeighbourOrderComparator(this->id));
 			for (auto& target : targets)
 			{
 				//ensures that the random player doesnt take own square if they can avoid it
 				if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)) )
 				{
-
-					cout << "Didnt take my Own target im a real boy now" << endl;
 					break;
-			
 				}
 				if (abs(target.pipCount) + move.captureTotal() <= 6 )
 				{
@@ -40,16 +37,6 @@ public:
 				}
 			}
 		}
-
-		//} while (!board.isValidMove(move));
-		
-
-		//cout << id << endl;
-		//for (auto& target : move.captureTargets)
-		//{
-		//	cout << target.direction << " : " << target.pipCount << " " << endl;
-		//}
-
 		return move;
 	}
 /*
