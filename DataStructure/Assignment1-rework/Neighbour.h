@@ -61,3 +61,21 @@ struct NeighbourAbsComparator
 };
 
 
+struct NeighbourOrderComparator
+{
+	int order;
+	NeighbourOrderComparator(int o = 0) { order = o; };
+	// Compare 2 Neigbours by pipCount Value Accending if order = 0 and decending if order =1
+	bool operator ()(const Neighbour & neighbour1, const Neighbour &  neighbour2)
+	{
+		if (order == 0)
+		{
+			return (neighbour1.pipCount < neighbour2.pipCount);
+		}
+		else
+		{
+			return (neighbour1.pipCount > neighbour2.pipCount);
+		}
+		
+	}
+};

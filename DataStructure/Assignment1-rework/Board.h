@@ -222,6 +222,8 @@ inline Move Board::getMove(int k) const
 inline void Board::addMove(Move move)
 {
 	int pipCount = 1;
+
+	cout << move.player << " Player iD" << endl;
 	if (captureTargets(move) > 0)
 	{
 		pipCount = captureTargets(move);

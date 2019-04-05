@@ -7,11 +7,48 @@ public:
 	RandomPlayer() : Player() {};
 	RandomPlayer(int i, string name = "Random Player ") : Player(i, name += to_string(i)) {};
 	~RandomPlayer() {};
-	/*Move getMove(const Board &board)
+	Move getMove(const Board &board)
 	{
-
 		Move move = board.getRandomMove();
 		move.player = this->id;
+	//	do
+	//	{
+			cout << "Getting random move " << endl;
+		//	move = board.getRandomMove();
+			list<Neighbour>targets = board.getTargets(move);
+
+
+
+			if (targets.size() == 2)
+			{
+				move.captureTargets = targets;
+			}
+			else if (targets.size() > 2)
+			{
+				targets.sort(NeighbourOrderComparator(this->id));
+
+				for (auto& target : targets)
+				{
+					if (abs(target.pipCount) + move.captureTotal() <= 6)
+					{
+						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
+					}
+				}
+			}
+
+		//} while (!board.isValidMove(move));
+		
+
+		cout << id << endl;
+		for (auto& target : move.captureTargets)
+		{
+			cout << target.direction << " : " << target.pipCount << " " << endl;
+		}
+
+		return move;
+	}
+/*
+
 
 		list<Neighbour>targets = board.getTargets(move);
 
