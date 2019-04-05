@@ -11,39 +11,44 @@ public:
 	{
 		Move move = board.getRandomMove();
 		move.player = this->id;
-	//	do
-	//	{
+
+		
+		
+		list<Neighbour>targets = board.getTargets(move);
+
+		if (targets.size() == 2)
+		{
+			move.captureTargets = targets;
+		}
+		else if (targets.size() > 2)
+		{
 			cout << "Getting random move " << endl;
-		//	move = board.getRandomMove();
-			list<Neighbour>targets = board.getTargets(move);
-
-
-
-			if (targets.size() == 2)
+			targets.sort(NeighbourOrderComparator(this->id));
+			for (auto& target : targets)
 			{
-				move.captureTargets = targets;
-			}
-			else if (targets.size() > 2)
-			{
-				targets.sort(NeighbourOrderComparator(this->id));
-
-				for (auto& target : targets)
+				//ensures that the random player doesnt take own square if they can avoid it
+				if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)) )
 				{
-					if (abs(target.pipCount) + move.captureTotal() <= 6)
-					{
-						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
-					}
+
+					cout << "Didnt take my Own target im a real boy now" << endl;
+					break;
+			
+				}
+				if (abs(target.pipCount) + move.captureTotal() <= 6 )
+				{
+					move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
 				}
 			}
+		}
 
 		//} while (!board.isValidMove(move));
 		
 
-		cout << id << endl;
-		for (auto& target : move.captureTargets)
-		{
-			cout << target.direction << " : " << target.pipCount << " " << endl;
-		}
+		//cout << id << endl;
+		//for (auto& target : move.captureTargets)
+		//{
+		//	cout << target.direction << " : " << target.pipCount << " " << endl;
+		//}
 
 		return move;
 	}
