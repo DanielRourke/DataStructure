@@ -2,15 +2,20 @@
 #include "Player.h"
 class MiniMaxPlayer :
 	public Player
+	
 {
 public:
 	MiniMaxPlayer() : Player() {};
 	MiniMaxPlayer(int i, string name = "MiniMax Player") : Player(i, name) {};
 	~MiniMaxPlayer() {};
+	int count;
 	Move getMove(const Board &board)
 	{
-		return maxMove(board);
-		/*
+		count = 0;
+		Move ret =  maxMove(board);
+		cout << ret.x << " " << ret.y << " " << ret.utilty<< endl;
+		return ret;
+		/**
 		fun
 			nested for loop
 				if win return 1 if lose  return -1
@@ -24,29 +29,30 @@ public:
 
 	Move minMove(const Board &board)
 	{
-
+	//	cout << count << endl;
+		count++;
 		list<Move> rMoves = board.getRemainingMoves();
 
-		if (rMoves.size() <= 0)
+		
+		if (rMoves.empty() || count > 10000)
 		{
-			int score = board.getScore();
-			if ((score > 0 && id == 0) || (score < 0 && id ==1))
+			if (id == 0)
 			{
-
-				cout << "Min move win" << endl;
-				return Move(-1, -1, 1.0);
+				return Move(0, 0, -board.getScore() * -0.1 );
 			}
-			else
+			else if (id == 1)
 			{
-				return Move(-1, -1, -1.0);;
+				return Move(0, 0, board.getScore() *  -0.1);
 			}
 		}
+			
+
 		priority_queue<Move, vector<Move>, greater<vector<Move>::value_type>> bestMove;
 		
 		for(Move move :rMoves)
 		{
 			Board tempBoard(board);
-			list<Neighbour>targets = board.getTargets(move);
+			list<Neighbour>targets = tempBoard.getTargets(move);
 			if (targets.size() == 2)
 			{
 				move.captureTargets = targets;
@@ -67,38 +73,56 @@ public:
 					}
 				}
 			}
+			cout << "before " << rMoves.size() << " " << tempBoard.getRemainingMoves().size() << endl;
 			tempBoard.addMove(move, (id + 1) % 2);
-			move.utilty += minMove(tempBoard).utilty;
+			cout << "after" << rMoves.size() << " " << tempBoard.getRemainingMoves().size() << endl;
+			if (tempBoard.getRemainingMoves().size() <= 0)
+			{
+				int score = board.getScore();
+				if ((score > 0 && id == 0) || (score < 0 && id == 1))
+				{
+				//	cout << "Win" << endl;
+					move.utilty = 1;
+				}
+				else
+				{
+					//cout << "loss" << endl;
+					move.utilty = -1;
+				}
+			}
+			else
+			{
+				move.utilty = maxMove(tempBoard).utilty;
+			}
 			bestMove.push(move);
 		}
-
+		//cout << "Minmove best move " << bestMove.top().utilty << endl;
 		return bestMove.top();
 	}
 
 	Move maxMove(const Board &board)
 	{
-		
+	//	cout << count << endl;
+		count++;
 		list<Move> rMoves = board.getRemainingMoves();
-
-		if (rMoves.size() <= 0)
+		if (rMoves.empty() || count > 10000)
 		{
-			int score = board.getScore();
-			if ((score > 0 && id == 0) || (score < 0 && id == 1))
+			if (id == 0)
 			{
-				cout << "Max move win" << endl;
-				return Move(-1,-1, 1.0);
+				return Move(0, 0, -board.getScore() * 0.1);
 			}
-			else
+			else if (id == 1)
 			{
-				return Move(-1, -1, -1.0);;
+				return Move(0, 0, board.getScore() *  0.1);
 			}
 		}
+
 		priority_queue<Move, vector<Move>, less<vector<Move>::value_type>> bestMove;
 
 		for (Move move : rMoves)
 		{
 			Board tempBoard(board);
-			list<Neighbour>targets = board.getTargets(move);
+			list<Neighbour>targets = tempBoard.getTargets(move);
 			if (targets.size() == 2)
 			{
 				move.captureTargets = targets;
@@ -119,11 +143,33 @@ public:
 					}
 				}
 			}
+			cout << "before " << rMoves.size() << " " << tempBoard.getRemainingMoves().size() << endl;
 			tempBoard.addMove(move, id);
-			move.utilty += minMove(tempBoard).utilty;
+
+			cout << "after" << rMoves.size() << " " << tempBoard.getRemainingMoves().size() << endl;
+			if (tempBoard.getRemainingMoves().size() <= 0)
+			{
+				int score = board.getScore();
+				if ((score > 0 && id == 0) || (score < 0 && id == 1))
+				{
+					//cout << "Win" << endl;
+					move.utilty = 1;
+				}
+				else
+				{
+					//cout << "loss" << endl;
+					move.utilty = -1;
+				}
+			}
+			else
+			{
+				move.utilty = minMove(tempBoard).utilty;
+			}
+			
 			bestMove.push(move);
 		}
 
+		//cout << "Maxmove best move " << bestMove.top().utilty << endl;
 		return bestMove.top();
 	}
 };

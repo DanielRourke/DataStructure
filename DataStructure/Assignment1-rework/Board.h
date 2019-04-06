@@ -29,6 +29,7 @@ public:
 	Move getRandomMove() const;
 	list<Move> getRemainingMoves() const;
 	int getScore()const;
+	void resetBoard(int r, int c);
 
 
 	//bool isGameOver();
@@ -41,6 +42,24 @@ Board::Board(int r, int c) {
 	for (int i = 0; i < row * col; i++)
 	{
 		grid.emplace( i , 0);
+	}
+
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+		{
+			remainingMoves.push_back(Move(i, j));
+		}
+}
+inline void Board::resetBoard(int r, int c)
+{
+	row = r;
+	col = c;
+	grid.clear();
+	remainingMoves.erase(remainingMoves.begin(), remainingMoves.end());
+
+	for (int i = 0; i < row * col; i++)
+	{
+		grid.emplace(i, 0);
 	}
 
 	for (int i = 0; i < row; i++)

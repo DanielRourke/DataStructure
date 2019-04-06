@@ -33,7 +33,7 @@ int main()
 	
 	Game game(row, col, gameMode);
 	game.play();
-
+	//game.simPlay(10, gameMode);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

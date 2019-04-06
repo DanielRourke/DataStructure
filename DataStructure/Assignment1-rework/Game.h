@@ -15,7 +15,8 @@ public:
 	~Game();
 	void play();
 	void setMode(int);
-	void determineWinner();
+	pair < Player*, int> determineWinner();
+	void simPlay(int,int,int,int);
 };
 
 Game::Game(int row = 3, int col = 3, int mode = 0) : gameBoard(row, col)
@@ -24,7 +25,9 @@ Game::Game(int row = 3, int col = 3, int mode = 0) : gameBoard(row, col)
 }
 
 Game::~Game()
-{}
+{
+	delete[] *players;
+}
 
 inline void Game::play()
 {
@@ -39,11 +42,60 @@ inline void Game::play()
 	} while (gameBoard.getRemainingMoves().size() > 0);
 
 	gameBoard.printBoard();
-	determineWinner();
+	pair<Player*,int> winner = determineWinner();
+
+	cout << winner.first->getName() << " Wins by " << winner.second << endl;
+}
+
+inline void Game::simPlay(int games,int gameMode, int row = 3, int col = 3)
+{
+
+	setMode(gameMode);
+	vector<pair<Player*, int>> gameResults;
+
+	for (int i = 0; i < games; i++)
+	{
+		int playerIndex = 0;
+		Move currentMove;
+		do
+		{
+			currentMove = players[playerIndex]->getMove(gameBoard);
+			gameBoard.addMove(currentMove, playerIndex);
+			playerIndex = ++playerIndex % 2;
+
+		} while (gameBoard.getRemainingMoves().size() > 0);
+
+		gameBoard.printBoard();
+		gameResults.push_back(determineWinner());
+		gameBoard.resetBoard(row,col);
+	}
+
+	int player0 = 0;
+	int player1 = 0;
+
+	for (pair <Player*, int> winner : gameResults)
+	{
+		if (winner.first->getName().compare(players[0]->getName()))
+		{
+			player0++;
+		}
+		else
+		{
+			player1++;
+		}
+	}
+
+	cout << players[0]->getName() << "Games Won : " << player0 << endl;
+	cout << players[1]->getName() << "Games Won : " << player1 << endl;
+
 }
 
 inline void Game::setMode(int playerCombo)
 {
+	//for (Player *player : players)
+	//{
+	//	delete player;
+	//}
 
 	switch (playerCombo)
 	{
@@ -66,15 +118,15 @@ inline void Game::setMode(int playerCombo)
 	}
 }
 
-inline void Game::determineWinner()
+inline pair<Player*,int> Game::determineWinner()
 {
 	int score = gameBoard.getScore();
 	if (score > 0)
 	{
-		cout << players[0]->getName() << " Wins by " << score << endl;
+		return make_pair(players[0], score);
 	}
 	else if (score < 0)
 	{
-		cout << players[1]->getName() << " Wins by " << score << endl;
+		return make_pair(players[1], score);
 	}
 }
