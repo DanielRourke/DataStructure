@@ -30,7 +30,7 @@ public:
 	list<Move> getRemainingMoves() const;
 	int getScore()const;
 	void resetBoard(int r, int c);
-	double getHuristicScore();
+	double getHuristicScore() const;
 
 
 	//bool isGameOver();
@@ -381,27 +381,27 @@ inline int Board::getScore() const
 	return total;
 }
 
-inline double Board::getHuristicScore()
+inline double Board::getHuristicScore() const
 {
 	double total = 0;
 	for (auto& cell : grid)
 	{
 		if (cell.second == 6)
 		{
-			total++;
+			total += 1;
 		}
 		else if (cell.second == -6)
 		{
-			total--;
+			total -=1;
 		}
 
 		if (cell.second > 0)
 		{
-			total += (1 /(row*col));
+			total += 0.1;
 		}
 		else if (cell.second < 0)
 		{
-			total -= (1 / (row*col));
+			total -= 0.1;
 		}
 
 	}

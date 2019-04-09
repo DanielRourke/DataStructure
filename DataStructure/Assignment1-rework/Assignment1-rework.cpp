@@ -9,7 +9,7 @@ int main()
 srand((int)time(NULL));
 	Game game(3,3,4);
 	//	game.play();
-	game.simPlay(10, 4);
+	game.simPlay(10,4);
 	
 
 //	int row, col;

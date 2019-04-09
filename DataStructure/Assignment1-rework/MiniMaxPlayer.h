@@ -11,7 +11,7 @@ public:
 	int count;
 	Move getMove(const Board &board)
 	{
-		count = 1000;
+		count = 5000;
 		Move ret =  maxMove(board);
 		cout <<" X " <<  ret.x << " Y " << ret.y << " Utility: " << ret.utility<< endl;
 		return ret;
@@ -47,10 +47,10 @@ public:
 				for (auto& target : targets)
 				{
 					//ensures that the player doesnt take own square if they can avoid it
-					if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
+		/*			if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
 					{
 						break;
-					}
+					}*/
 					if (abs(target.pipCount) + move.captureTotal() <= 6)
 					{
 						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
@@ -75,28 +75,30 @@ public:
 
 				if (id == 0)
 				{
-					move.utility = board.getScore()  * 1 ;
+					move.utility = tempBoard.getHuristicScore() * 1 ;
 				}
 				else if (id == 1)
 				{
-					move.utility = board.getScore() * -1;
+					move.utility = tempBoard.getHuristicScore() * -1;
 				}
 			}
 			else if(count > 0)
 			{
 				move.utility = maxMove(tempBoard).utility;
 			}
-			else
+			else if( count <= 0)
 			{
 				if (id == 0)
 				{
-					move.utility = board.getScore() * 0.1;
+					move.utility = tempBoard.getHuristicScore() * 0.1;
 				}
 				else if (id == 1)
 				{
-					move.utility = board.getScore() * -0.1;
+					move.utility = tempBoard.getHuristicScore() * -0.1;
 				}
 			}
+
+			move.utility += move.captureTotal() * 0.0001;
 
 			bestMove.push(move);
 		}
@@ -199,10 +201,10 @@ public:
 				for (auto& target : targets)
 				{
 					//ensures that the player doesnt take own square if they can avoid it
-					if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
-					{
-						break;
-					}
+					//if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
+					//{
+					//	break;
+					//}
 					if (abs(target.pipCount) + move.captureTotal() <= 6)
 					{
 						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
@@ -229,11 +231,11 @@ public:
 
 				if (id == 0)
 				{
-					move.utility = board.getScore() * 1;
+					move.utility = tempBoard.getHuristicScore() * 1;
 				}
 				else if (id == 1)
 				{
-					move.utility = board.getScore() * -1;
+					move.utility = tempBoard.getHuristicScore() * -1;
 				}
 			}
 			else if (count > 0)
@@ -244,13 +246,14 @@ public:
 			{
 				if (id == 0)
 				{
-					move.utility = board.getScore() * -0.1;
+					move.utility = tempBoard.getHuristicScore() * 0.1;
 				}
 				else if (id == 1)
 				{
-					move.utility = board.getScore() * 0.1;
+					move.utility = tempBoard.getHuristicScore() * -0.1;
 				}
 			}
+			move.utility += move.captureTotal() * 0.0001;
 
 			bestMove.push(move);
 		}
