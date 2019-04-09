@@ -7,9 +7,9 @@ class Move
 public:
 	int x;
 	int y;
-	double utilty;
+	double utility;
 	list<Neighbour>captureTargets;
-	Move(int a = 0, int b = 0, double u = 0.0) : x(a), y(b), utilty(u) {}
+	Move(int a = 0, int b = 0, double u = 0.0) : x(a), y(b), utility(u) {}
 	~Move();
 	int captureTotal();
 	//void getNeighbours(const Board &board);
@@ -20,12 +20,12 @@ public:
 
 	bool operator<(Move m) const
 	{
-		return (utilty < m.utilty);
+		return (utility < m.utility);
 	}
 
 	bool operator>(Move m) const
 	{
-		return (utilty > m.utilty);
+		return (utility > m.utility);
 	}
 
 
