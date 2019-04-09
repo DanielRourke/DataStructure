@@ -61,6 +61,7 @@ inline void Game::simPlay(int games,int gameMode, int row = 3, int col = 3)
 		{
 			currentMove = players[playerIndex]->getMove(gameBoard);
 			gameBoard.addMove(currentMove, playerIndex);
+			gameBoard.printBoard();
 			playerIndex = ++playerIndex % 2;
 
 		} while (gameBoard.getRemainingMoves().size() > 0);
@@ -77,11 +78,11 @@ inline void Game::simPlay(int games,int gameMode, int row = 3, int col = 3)
 	{
 		if (winner.first->getName().compare(players[0]->getName()))
 		{
-			player0++;
+			player1++;
 		}
 		else
 		{
-			player1++;
+			player0++;
 		}
 	}
 
