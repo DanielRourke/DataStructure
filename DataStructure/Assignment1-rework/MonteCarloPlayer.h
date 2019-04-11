@@ -76,9 +76,7 @@ public:
 		{
 			if ((id == 0 && tempBoard.getScore() > 0) || id == 1 && tempBoard.getScore() < 0)
 			{
-			
 				return 1;
-
 			}
 			else
 			{

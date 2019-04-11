@@ -31,57 +31,189 @@ public:
 
 		} while (!board.isMoveRemaining(move) && !board.isEmptyMove(move));
 
-		
-		list<Neighbour>targets = board.getTargets(move);
 
-		if (targets.size() == 2)
-		{
-				move.captureTargets = targets;
-		}
-		else if (targets.size() > 2)
-		{
-			do {
-				bool inputValid = true;
-				move.captureTargets.clear();
-				string input;
-				cin.clear();
-				cin.ignore(1000, '\n');
+		unordered_map<string, int> targets;
+			targets = board.getNeighbours(move);
+			unordered_map<string, int>::const_iterator it;
 
-				for (auto& target : targets)
+			if (targets.size() > 1)
+			{
+				do
 				{
-					cout << target.direction << " : " << target.pipCount << " ";
-				}
-
-				cout << "Enter two or more Directions to capture" << endl;
-				getline(cin, input);
-				stringstream captureTargets(input);
-
-				while (captureTargets >> input )
-				{
-					if (input.compare("Top") != 0 && input.compare("Bottom") != 0 && input.compare("Right") != 0 && input.compare("Left") != 0)
-					{
-						inputValid = false;
-					}
-					else
-					{
-						for (auto& target : targets)
-						{
-							if (target.direction == input)
-							{
-								move.captureTargets.push_back(target);
-							}
-						}
-					}
 					
-				}
+					move.captureTargets.clear();
+					cout << "Neighbouring Cells are : " << endl;
+					for (auto& neighbour : targets)
+					{
+						cout << neighbour.first << " : " << neighbour.second << " ";
+					}
+					cout << endl;
+					string input;
+					string direction;
+					getline(cin, input);
+					stringstream captureTargets(input);
+					while (captureTargets >> direction)
+					{
+						it = targets.find(direction);
+						if (it == targets.end())
+						{
+							break;
+						}
 
-			} while (!board.isTargetsValid(move.captureTargets) || move.captureTargets.size() < 2);
+				/*		try
+						{
+							move.captureTargets.emplace(direction, targets.at(direction));
+						}
+						catch (const out_of_range& oor)
+						{
+							inputValid = false;
+						}*/
 
-		}
+						/*std::unordered_map<std::string, double>::const_iterator got = mymap.find(input);
+
+						if (got == mymap.end())
+							std::cout << "not found";
+						else
+							std::cout << got->first << " is " << got->second;*/
+					}
+				} while (!board.isValidMove(move) && it == targets.end());
+			}
 
 		return move;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		//list<Neighbour>targets = board.getTargets(move);
+
+		//if (targets.size() == 2)
+		//{
+		//		move.captureTargets = targets;
+		//}
+		//else if (targets.size() > 2)
+		//{
+		//	do {
+		//		bool inputValid = true;
+		//		move.captureTargets.clear();
+		//		string input;
+		//		cin.clear();
+		//		cin.ignore(1000, '\n');
+
+		//		for (auto& target : targets)
+		//		{
+		//			cout << target.direction << " : " << target.pipCount << " ";
+		//		}
+
+		//		cout << "Enter two or more Directions to capture" << endl;
+		//		getline(cin, input);
+		//		stringstream captureTargets(input);
+
+		//		while (captureTargets >> input )
+		//		{
+		//			if (input.compare("Top") != 0 && input.compare("Bottom") != 0 && input.compare("Right") != 0 && input.compare("Left") != 0)
+		//			{
+		//				inputValid = false;
+		//			}
+		//			else
+		//			{
+		//				for (auto& target : targets)
+		//				{
+		//					if (target.direction == input)
+		//					{
+		//						move.captureTargets.push_back(target);
+		//					}
+		//				}
+		//			}
+		//			
+		//		}
+
+		//	} while (!board.isTargetsValid(move.captureTargets) || move.captureTargets.size() < 2);
+
+		//}
+
+		//return move;
+
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//	Move getMove(const Board &board)
 	//	{
@@ -96,8 +228,7 @@ public:
 	//			do
 	//			{
 	//	
-	//
-	//				
+	//	
 	//					for (auto& target : targets)
 	//					{
 	//						if (target.direction.compare(input) == 0)
