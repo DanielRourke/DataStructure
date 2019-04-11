@@ -47,15 +47,32 @@ public:
 				for (auto& target : targets)
 				{
 					//ensures that the player doesnt take own square if they can avoid it
-		/*			if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
+					if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
 					{
 						break;
-					}*/
+					}
 					if (abs(target.pipCount) + move.captureTotal() <= 6)
 					{
 						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
 					}
-				}
+
+				//ensures that the player doesnt take own square if they can avoid it
+					//if (abs(target.pipCount) + move.captureTotal() <= 6)
+					//{
+					//	//unless it is a 6
+					//	if ((abs(target.pipCount) + move.captureTotal() == 6))
+					//	{
+					//		move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
+					//	}
+					//	else if (!(targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0))))
+					//	{
+					//		move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
+					//	}
+					//}
+
+				
+				} 
+				
 			}
 		
 		//	cout << "Remaining Moves " << tempBoard.getRemainingMoves().size() << endl;
@@ -209,6 +226,21 @@ public:
 					{
 						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
 					}
+
+
+					//ensures that the player doesnt take own square if they can avoid it
+					//if (abs(target.pipCount) + move.captureTotal() <= 6)
+					//{
+					//	//unless it is a 6
+					//	if ((abs(target.pipCount) + move.captureTotal() == 6))
+					//	{
+					//		move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
+					//	}
+					//	else if (!(targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0))))
+					//	{
+					//		move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
+					//	}
+					//}
 				}
 			}
 

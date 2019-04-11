@@ -4,6 +4,8 @@
 #include "HumanPlayer.h"
 #include "RandomPlayer.h"
 #include "MiniMaxPlayer.h"
+#include "MonteCarloPlayer.h"
+#include "MiniMaxDepthPlayer.h"
 
 class Game
 {
@@ -116,6 +118,27 @@ inline void Game::setMode(int playerCombo)
 	case 4:
 		players[0] = new RandomPlayer(0);
 		players[1] = new MiniMaxPlayer(1);
+		break;
+	case 5:
+		players[0] = new RandomPlayer(0);
+		players[1] = new MonteCarloPlayer(1);
+		break;
+	case 6:
+		players[0] = new MiniMaxPlayer(0);
+		players[1] = new MonteCarloPlayer(1);
+		break;
+	case 7:
+		players[0] = new RandomPlayer(0);
+		players[1] = new MiniMaxDepthPlayer(1);
+		break;
+	case 8:
+		players[0] = new MiniMaxPlayer(0);
+		players[1] = new MiniMaxDepthPlayer(1);
+		break;
+	case 9:
+		players[0] = new MonteCarloPlayer(0);
+		players[1] = new MiniMaxDepthPlayer(1);
+		break;
 	}
 }
 

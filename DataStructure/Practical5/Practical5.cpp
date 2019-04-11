@@ -15,14 +15,134 @@ void fun(int i)
 	cout << endl;
 	fun(i - 2);
 }
+
+
+
+
+void printStars(int n)
+{
+	if (n == 0)
+	{
+		cout << endl;
+	}
+	else
+	{
+		cout << "*";
+		if (n > 0)
+		{
+			printStars(n - 1);
+		}
+		else if (n < 0)
+		{
+			printStars(n + 1);
+		}
+	}
+}
+
+void printLines(int n)
+{
+	if (n > 0)
+	{
+		printStars(n);
+		printLines(n - 1);
+		printStars(-n);
+	}
+	else if (n < 0)
+	{
+		printStars(n);
+		printLines(n + 1);
+		printStars(-n);
+	}
+}
+
+
+long power(int x, int y)
+{
+	if (y >= 0)
+	{
+		if (y == 0)
+		{
+			return 1;
+		}
+		else if (y == 1)
+		{
+			return x;
+		}
+		else
+		{
+			return x * power(x, y - 1);
+		}
+	}
+	else
+	{
+		return 1 / power(x, -y);
+	}
+
+	return -1;
+}
+
 int main()
 {
-    std::cout << "Hello World!\n"; 
 	int input = 0;
 	cin >> input;
-	fun(input);
-
+	//fun(input);
+	//cout << power(2, input)<< endl;
+	printLines(input);
 }
+
+
+//{
+//	print stars 4 times
+//	print stars 3 times 
+//	print stars 2 times
+//	print stars 1 times
+//
+//	print stars 1 times
+//	print stars 2 times
+//	print stars 3 times
+//	print stars 4 times
+//
+//
+//	while x != 0
+//		print stars (x y)
+//			
+//		if (x !=0)
+//			print *
+//		if x > 0
+//			x - 1
+//			print stars
+//
+//
+//
+//
+//		if x < 0
+//			x + 1
+//			print star
+//
+//
+//		printStar(4)
+//
+//
+//			fun1(4)
+//
+//			fun(4)
+//			fun1 4 -1
+//			fun 4
+
+	
+
+
+
+
+			
+
+
+
+				
+
+
+
+
 
 
 

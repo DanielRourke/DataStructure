@@ -7,37 +7,42 @@
 int main()
 {
 srand((int)time(NULL));
-	Game game(3,3,4);
-	//	game.play();
-	game.simPlay(10,4);
+	//Game game(3,3,4);
+	////	game.play();
+	//game.simPlay(10,4);
 	
 
-//	int row, col;
-//
-//	//do
-////	{
-//		cout << "input the size of board, say (3 3), (3 5) or (5 5): " << endl;
-//
-//		cin >> row >> col;
-//
-//	//} while ((row == 3 && (col != 3 && col != 5)) || (row == 5 && col != 5));
-//
-//
-//	int gameMode = 0;
-//	do
+	int row, col;
+
+	//do
 //	{
-//		cout << "Pick Game Mode" << endl
-//			<< "1. Human Vs Human" << endl
-//			<< "2. Human Vs Random" << endl
-//			<< "3. Random Vs Random" << endl
-//		    << "4. Random Vs MiniMax" << endl;  
-//
-//		cin >> gameMode;
-//
-//	} while (gameMode < 1 || gameMode > 4);
-//	
-//	Game game(row, col, gameMode);
-//	game.play();
+		cout << "input the size of board, say (3 3), (3 5) or (5 5): " << endl;
+
+		cin >> row >> col;
+
+	//} while ((row == 3 && (col != 3 && col != 5)) || (row == 5 && col != 5));
+
+
+	int gameMode = 0;
+	do
+	{
+		cout << "Pick Game Mode" << endl
+			<< "1. Human Vs Human" << endl
+			<< "2. Human Vs Random" << endl
+			<< "3. Random Vs Random" << endl
+		    << "4. Random Vs MiniMax" << endl
+			<< "5. Random Vs MonteCarlo" << endl
+			<< "6. MonteCarlo Vs MiniMax" << endl
+			<< "7. Random Vs MiniMaxDepth" << endl
+			<< "8. MiniMax Vs MiniMaxDepth" << endl
+			<< "9. MonteCarlo Vs MiniMaxDepth" << endl;
+
+		cin >> gameMode;
+
+	} while (gameMode < 1 || gameMode >9);
+	
+	Game game(row, col, gameMode);
+	game.play();
 	//game.simPlay(10, gameMode);
 }
 
