@@ -21,6 +21,8 @@
 #include <sstream>
 #include <cmath>
 #include <string>
+#include <queue>
+#include "time.h"
 using  namespace std;
 
 #endif //PCH_H

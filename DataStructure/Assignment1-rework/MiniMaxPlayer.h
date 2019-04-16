@@ -111,11 +111,11 @@ public:
 				}
 				else if (id == 1)
 				{
-					move.utility = tempBoard.getHuristicScore() * -0.1;
+					move.utility = tempBoard.getHuristicScore() * - 0.1;
 				}
 			}
 
-			move.utility += move.captureTotal() * 0.0001;
+			move.utility += (move.captureTotal() * 0.01);
 
 			bestMove.push(move);
 		}

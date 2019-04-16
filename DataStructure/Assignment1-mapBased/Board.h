@@ -20,5 +20,9 @@ public:
 	bool isValidMove(Move);
 	void getNeighbours(Move &);
 	Move getRandomMove();
+	list<Move> getRemainingMoves();
+	double getHuristicScore();
+	bool isboardFull();
+	int getScore();
 };
 

@@ -11,39 +11,44 @@ lost or damaged.
 **************************/
 
 #include "pch.h"
-#include <iostream>
-#include "Board.h"
+#include "Game.h"
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
-	Board board1(3 ,3);
+	srand((int)time(NULL));
+	int row, col;
 
-	board1.printBoard();
-	board1.addMove(Move(0, 0), 0);
+	do
+	{
+	cout << "input the size of board, say (3 3), (3 5) or (5 5): " << endl;
 
-	board1.printBoard();
-	board1.addMove(Move(0, 2), 1);
+	cin >> row >> col;
 
-	board1.printBoard();
-	Move move(0, 1);
-	board1.getNeighbours(move);
-	move.printTargets();
-	board1.addMove(move, 0);
-	
-	board1.printBoard();
-	Board board2(board1);
+	} while ((row == 3 && (col != 3 && col != 5)) || (row == 5 && col != 5));
 
-	board1.printBoard();
+
+	int gameMode = 0;
+	do
+	{
+		cout << "Pick Game Mode" << endl
+			<< "1. Human Vs Human" << endl
+			<< "2. Human Vs Random" << endl
+			<< "3. Random Vs Random" << endl
+			<< "4. Random Vs MiniMax" << endl
+			<< "5. Random Vs MonteCarlo" << endl
+			<< "6. MonteCarlo Vs MiniMax" << endl
+			<< "7. Random Vs MiniMaxDepth" << endl
+			<< "8. MiniMax Vs MiniMaxDepth" << endl
+			<< "9. MonteCarlo Vs MiniMaxDepth" << endl;
+
+		cin >> gameMode;
+
+	} while (gameMode < 1 || gameMode >10);
+
+	Game game(row, col, gameMode);
+	game.play();
+
+
+
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

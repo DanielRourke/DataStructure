@@ -33,13 +33,19 @@ public:
 		board.getNeighbours(move);
 		move.sortTargets();
 
-		if (move.targets.size() > 1)
+		if (move.targets.size() < 2)
 		{
+			move.targets.clear();
+		}
+		else if (move.targets.size() > 2)
+		{
+			Move tempMove(move.x, move.y);
 			bool inputValid;
 			do
 			{
 				inputValid = true;
-				list<Neighbour> temp;
+				tempMove.targets.clear();
+				cin.ignore(1000, '\n');
 				cout << "Capture Targets are : " << endl;
 				move.printTargets();
 				cout << endl;
@@ -47,26 +53,29 @@ public:
 				string direction;
 				getline(cin, input);
 				stringstream captureTargets(input);
-				list<Neighbour>::iterator it;
+
 				while (captureTargets >> direction)
 				{
-						if (input != "Top" && input != "Bottom" && input !=  "Right" && input != "Left")
-						{
+					if (direction != "Top" && direction != "Bottom" && direction !=  "Right" && direction != "Left" && cin)
+					{
 							inputValid = false;
-						}
-						else
-						{
-								for (auto& target : move.targets)
+							break;
+					}
+					else
+					{
+							for (auto& target : move.targets)
+							{
+								if (target.direction == direction)
 								{
-									if (target.direction == input)
-									{
-										temp.push_back(target);
-									}
+									tempMove.targets.push_back(target);
 								}
-						}
-
+							}
+					}
 				}
-			} while (!board.isValidMove(move) && !inputValid);
+			} while (!board.isValidMove(tempMove) || !inputValid);
+			
+			move.targets = tempMove.targets;
+
 		}
 
 		return move;

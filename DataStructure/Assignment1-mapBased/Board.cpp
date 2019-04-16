@@ -67,7 +67,9 @@ Board::Board(const Board& cboard)
 		{
 			if (x + 1 < row  && x + 1 >= 0 && y < col && y >= 0)
 			{
+
 				neighbourMap[Move(x, y)].push_back(Neighbour("Bottom", &grid[x + 1][y]));
+				//neighbourMap.emplace(Move(x, y), Neighbour("Bottom", &grid[x + 1][y]));
 			}
 
 			if (x - 1 < row  && x - 1 >= 0 && y < col && y >= 0)
@@ -201,7 +203,8 @@ void Board::printBoard()
 
 bool Board::addMove(Move move, int playerIndex)
 {
-	int pipCount = move.getTargetTotal();
+
+int pipCount = move.targetTotal();
 
 	if (pipCount == 0)
 	{
@@ -217,22 +220,22 @@ bool Board::addMove(Move move, int playerIndex)
 		{
 			if (target.direction == "Top")
 			{
-				*target.pipCount = 0;
+				grid[move.x - 1][move.y] = 0;
 				remainingMoves.push_back(Move(move.x - 1, move.y));
 			}
 			else if (target.direction == "Bottom")
 			{
-				*target.pipCount = 0;
+				grid[move.x + 1][move.y] = 0;
 				remainingMoves.push_back(Move(move.x + 1, move.y));
 			}
 			else if (target.direction == "Right")
 			{
-				*target.pipCount = 0;
+				grid[move.x][move.y + 1] = 0;
 				remainingMoves.push_back(Move(move.x, move.y + 1));
 			}
 			else if (target.direction == "Left")
 			{
-				*target.pipCount = 0;
+				grid[move.x][move.y - 1] = 0;
 				remainingMoves.push_back(Move(move.x, move.y - 1));
 			}
 		}
@@ -262,7 +265,7 @@ bool Board::isValidMove(Move move)
 	/* (remaingMoves.find(move) != remaingMoves.end() ?) */
 }
 
-void Board::getNeighbours(Move & move)
+void Board::getNeighbours(Move &move)
 {
 	move.targets = neighbourMap[move];
 }
@@ -273,4 +276,62 @@ Move Board::getRandomMove()
 	advance(moveIt, rand() % remainingMoves.size());
 	return *moveIt;
 
+}
+
+bool Board::isboardFull()
+{
+	return !remainingMoves.empty();
+}
+
+int Board::getScore()
+{
+	int score = 0 ;
+	for(int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+		{
+			if (grid[i][j] > 0)
+				score += 1;
+			else if (grid[i][j] < 0)
+				score -= 1;
+		}
+	return score;
+}
+
+list<Move> Board::getRemainingMoves()
+{
+	return remainingMoves;
+}
+
+
+
+
+double Board::getHuristicScore()
+{
+	double total = 0.0;
+
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < col; y++)
+		{
+			if (grid[x][y] > 0)
+			{
+				total += 0.1;
+				if (grid[x][y] == 6)
+				{
+					total += 1;
+				}
+
+			}
+			else if (grid[x][y] < 0)
+			{
+				total += -0.1;
+				if (grid[x][y] == -6)
+				{
+					total += -1;
+				}
+			}
+		}
+
+	} 
+	return total;
 }

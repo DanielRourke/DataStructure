@@ -30,6 +30,15 @@
     <ClInclude Include="HumanPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RandomPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

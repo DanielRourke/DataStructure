@@ -6,10 +6,6 @@ class Board
 private:
 	int row, col;
 	unordered_map<int, int> grid;
-
-	unordered_map < Move, vector<Neighbour>> nieghbourMap;
-	unordered_map < Move, int> boardGrid;
-
 	list<Move> remainingMoves;
 public:
 	Board();
@@ -24,7 +20,7 @@ public:
 	bool isEmptyMove(Move move) const;
 	int boardMove(int, int) const;
 	void addMove(Move, int);
-	unordered_map<string, int> getNeighbours(Move move);
+	unordered_map<string, int> getNeighbours(Move move) const;
 	list<Neighbour> getTargets(Move move) const;
 	int captureTargets(Move);
 	int countTargets(Move) const;
@@ -270,62 +266,61 @@ inline void Board::addMove(Move move, int playerIndex)
 }
 
 
-//unordered_map<string, int> Board::getNeighbours(Move move)
-//{
-//	unordered_map<string, int> neighbours;
-//
-//	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x + 1) * col + move.y)) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
-//	{
-//		neighbours.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
-//	}
-//
-//	if (move.x - 1 < row  && move.x - 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x - 1) * col + move.y)) < 6 && grid.at((move.x - 1) * col + move.y) != 0)
-//	{
-//		neighbours.emplace("Top", grid.at((move.x - 1) * col + move.y));
-//	}
-//
-//	if (move.x < row  && move.x >= 0 && move.y + 1 < col && move.y + 1 >= 0 && abs(grid.at(move.x * col + (move.y + 1))) < 6 && grid.at(move.x * col + (move.y + 1)) != 0)
-//	{
-//		neighbours.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
-//	}
-//
-//	if (move.x < row  && move.x >= 0 && move.y - 1 < col && move.y - 1 >= 0 && abs(grid.at(move.x * col + (move.y - 1))) < 6 && grid.at(move.x * col + (move.y - 1)) != 0)
-//	{
-//		neighbours.emplace("Left", grid.at(move.x * col + (move.y - 1)));
-//	}
-//
-//	int lowest = 7;
-//	int highest = 0;
-//
-//	do
-//	{
-//		for (auto& neighbour : neighbours)
-//		{
-//			if (abs(neighbour.second) < lowest)
-//			{
-//				lowest = abs(neighbour.second);
-//			}
-//			else if (abs(neighbour.second) > highest)
-//			{
-//				highest = abs(neighbour.second);
-//			}
-//
-//		}
-//
-//
-//		}
-//
-//
-//
-//	} while (lowest + highest > 6);
-//	
-//	
-//	
-//
-//
-//	return neighbours;
-//
-//}
+unordered_map<string, int> Board::getNeighbours(Move move) const
+{
+	unordered_map<string, int> neighbours;
+
+
+	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x + 1) * col + move.y)) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
+	{
+		neighbours.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
+	}
+
+	if (move.x - 1 < row  && move.x - 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x - 1) * col + move.y)) < 6 && grid.at((move.x - 1) * col + move.y) != 0)
+	{
+		neighbours.emplace("Top", grid.at((move.x - 1) * col + move.y));
+	}
+
+	if (move.x < row  && move.x >= 0 && move.y + 1 < col && move.y + 1 >= 0 && abs(grid.at(move.x * col + (move.y + 1))) < 6 && grid.at(move.x * col + (move.y + 1)) != 0)
+	{
+		neighbours.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
+	}
+
+	if (move.x < row  && move.x >= 0 && move.y - 1 < col && move.y - 1 >= 0 && abs(grid.at(move.x * col + (move.y - 1))) < 6 && grid.at(move.x * col + (move.y - 1)) != 0)
+	{
+		neighbours.emplace("Left", grid.at(move.x * col + (move.y - 1)));
+	}
+
+	//int lowest = 7;
+	//int highest = 0;
+
+	//do
+	//{
+	//	for (auto& neighbour : neighbours)
+	//	{
+	//		if (abs(neighbour.second) < lowest)
+	//		{
+	//			lowest = abs(neighbour.second);
+	//		}
+	//		else if (abs(neighbour.second) > highest)
+	//		{
+	//			highest = abs(neighbour.second);
+	//		}
+
+	//	}
+
+
+	//	}
+
+
+
+	//} while (lowest + highest > 6);
+	
+	
+
+	return neighbours;
+
+}
 
 
 list<Neighbour> Board::getTargets(Move move) const

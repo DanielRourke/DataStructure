@@ -81,7 +81,7 @@ public:
 				}
 			}
 
-			move.utility += move.captureTotal() * 0.0001;
+			move.utility += move.captureTotal() * 0.01;
 
 			bestMove.push(move);
 		}

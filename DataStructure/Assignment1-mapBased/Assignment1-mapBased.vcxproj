@@ -152,9 +152,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RandomPlayer.h" />
+    <ClInclude Include="SmartPlayer.h" />
     <ClInclude Include="structures.h" />
   </ItemGroup>
   <ItemGroup>

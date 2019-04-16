@@ -11,8 +11,10 @@ struct Neighbour {
 		pipCount = p;
 	}
 	Neighbour() {};
-
-
+	bool operator==(const Neighbour other)
+	{
+		return direction == other.direction;
+	}
 
 	bool operator<(const Neighbour other)
 	{
@@ -65,80 +67,79 @@ struct Move
 		utility = 0;
 	}
 
+	void printMove()
+	{
+		cout << " X: " << x << " Y: " << y << " Total: " << targetTotal() << endl;
+		printTargets();
+	}
+
 	void printTargets()
 	{
 		int index = 0;
 		for (Neighbour target : targets)
 		{
 			cout << index << ". " << target.direction << ": " << *target.pipCount << endl;
+			index++;
 		}
 		cout << "Total PipCount: " << targetTotal() << endl;
 	}
 
 	void sortTargets()
 	{
+
 		targets.sort(NeighbourAbsComparator());
-		while (targets.size() > 1 && abs(*targets.front().pipCount) + abs(*targets.back().pipCount) > 6)
+
+		while (targets.size() > 0  && *(targets.front().pipCount) == 0 )
+		{
+			targets.pop_front();
+		}
+
+		while (targets.size() > 1 && abs(*targets.front().pipCount) + abs(*targets.back().pipCount) > 6 )
 		{
 			targets.pop_back();
-			targets.sort(NeighbourAbsComparator());
 		}
 		targets.sort();
 	}
 
 	void pickTargets(int id)
 	{
-		if (targets.size() == 2 && targetTotal() == 6)
+		if (targetTotal() != 6 && targets.size() > 2)
 		{
-			return;
-		}
-		else if (targets.size() > 2)
-		{
-			targets.sort(NeighbourOrderComparator(id));
-			for (auto& target : targets)
+			while (targets.size() > 2 && targetTotal() > 6  || (targetTotal() < 6 && 
+			((id == 0 && *targets.back().pipCount > 0) || (id == 1 && *targets.back().pipCount))))
 			{
-				//ensures that the random player doesnt take own square if they can avoid it
-				if (targets.size() > 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
+				if (targetTotal() - abs(*targets.back().pipCount == 6))
 				{
-					targets.remove(target);
+					targets.pop_back();
+					break;
 				}
-				if (abs(target.pipCount) + move.captureTotal() <= 6)
+				else if (targetTotal() - abs(*targets.front().pipCount == 6))
 				{
-					move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
+					targets.pop_front();
+					break;
+				}
+				else
+				{
+					targets.pop_back();
 				}
 			}
 		}
-
-		/* while ( targetTotal() > 6 && targets.size() >2)
+		if (targetTotal() > 6)
 		{
-			for (Neighbour target: targets)
-			{
-				if ((targetTotal() - *abs(target.pipCount)) <=6)
-				{
-					remove
-
-				}
-
-			}
-
-
+			cout << " ERROR picking Tagets" << endl;
 		}
-		 check if removing 1 == 6
 
-		 else
-		 remove your own from top
+		if (targets.size() < 2)
+		{
+			targets.clear();
+		}
 
-
-
-
-			
-		*/
 	}
 
 
 	bool operator==(Move m) const
 	{
-		return (x == m.x && y == m.y);
+		return x * 7 + y == m.x * 7 + m.y;
 	}
 
 	bool operator<(Move m) const
@@ -165,7 +166,7 @@ struct Move
 struct MyHash {
 	std::size_t operator()(Move m) const {
 		std::hash<int> hashVal;
-		return hashVal((m.x * 10 )+ m.y );
+		return hashVal(m.x * 7 + m.y);
 	}
 };
 
