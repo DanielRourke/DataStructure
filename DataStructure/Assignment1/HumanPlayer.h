@@ -25,6 +25,8 @@ public:
 			}
 		} while (!board.isValidMove(move));
 
+		
+
 		//unordered_map<string, int> targets;
 		//targets = board.getTargets(move);
 		//unordered_map<string, int>::const_iterator it;

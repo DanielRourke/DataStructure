@@ -14,7 +14,7 @@ public:
 	int captureTotal();
 	//void getNeighbours(const Board &board);
 	bool operator==(Move m) const
-	{	
+	{
 		return (x == m.x && y == m.y);
 	}
 

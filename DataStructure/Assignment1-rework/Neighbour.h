@@ -76,6 +76,6 @@ struct NeighbourOrderComparator
 		{
 			return (neighbour1.pipCount > neighbour2.pipCount);
 		}
-		
+
 	}
 };

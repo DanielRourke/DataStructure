@@ -10,11 +10,8 @@ public:
 	~HumanPlayer() {};
 	Move getMove(const Board &board)
 	{
-
-
 		cout << name << endl;
 		Move move;
-		
 		do
 		{
 			cout << "Input your move with row and column numbers:" << endl;
@@ -54,6 +51,8 @@ public:
 					stringstream captureTargets(input);
 					while (captureTargets >> direction)
 					{
+
+
 						it = targets.find(direction);
 						if (it == targets.end())
 						{

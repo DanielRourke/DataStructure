@@ -6,6 +6,10 @@ class Board
 private:
 	int row, col;
 	unordered_map<int, int> grid;
+
+	unordered_map < Move, vector<Neighbour>> nieghbourMap;
+	unordered_map < Move, int> boardGrid;
+
 	list<Move> remainingMoves;
 public:
 	Board();
@@ -19,7 +23,6 @@ public:
 	bool isTargetsValid(list<Neighbour> targets) const;
 	bool isEmptyMove(Move move) const;
 	int boardMove(int, int) const;
-	//void addMove(int, int);
 	void addMove(Move, int);
 	unordered_map<string, int> getNeighbours(Move move);
 	list<Neighbour> getTargets(Move move) const;
@@ -464,7 +467,6 @@ inline double Board::getHuristicScore() const
 		}
 
 	}
-
 
 	return total;
 }
