@@ -95,11 +95,7 @@ inline void Game::simPlay(int games,int gameMode, int row = 3, int col = 3)
 
 inline void Game::setMode(int playerCombo)
 {
-	//for (Player *player : players)
-	//{
-	//	delete player;
-	//}
-
+	
 	switch (playerCombo)
 	{
 	case 1:

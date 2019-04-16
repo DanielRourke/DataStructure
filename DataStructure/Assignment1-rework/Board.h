@@ -208,6 +208,11 @@ inline bool Board::isTargetsValid(list<Neighbour> targets) const
 		return false;
 	}
 
+	if (targets.size() == 1 || targets.size() > 4)
+	{
+		return false;
+	}
+
 
 	return true;
 }
@@ -291,32 +296,49 @@ unordered_map<string, int> Board::getNeighbours(Move move) const
 		neighbours.emplace("Left", grid.at(move.x * col + (move.y - 1)));
 	}
 
-	//int lowest = 7;
-	//int highest = 0;
+	int min = 7;
+	int max = 0;
+	do
+	{
+		unordered_map<string, int>::const_iterator it;
+		//find min
+		min = 7;
+		string minDirection;
+		for (auto& neighbour : neighbours)
+		{
+			if (abs(neighbour.second) < min)
+			{
+				min = abs(neighbour.second);
+				minDirection = neighbour.first;
+			}
+		}
 
-	//do
-	//{
-	//	for (auto& neighbour : neighbours)
-	//	{
-	//		if (abs(neighbour.second) < lowest)
-	//		{
-	//			lowest = abs(neighbour.second);
-	//		}
-	//		else if (abs(neighbour.second) > highest)
-	//		{
-	//			highest = abs(neighbour.second);
-	//		}
+		//findmax
+		max = 0;
+		string maxDirection;
+		for (auto& neighbour : neighbours)
+		{
+			if (abs(neighbour.second) < max)
+			{
+				max = abs(neighbour.second);
+				maxDirection = neighbour.first;
+			}
+		}
 
-	//	}
+		if (min + max > 6)
+		{
+			it = neighbours.find(maxDirection);
+			if (it == neighbours.end())
+			{
+				cout << "something whent wrong!" << endl;
+			}
+			else
+			{
+				neighbours.erase(it);
+			}
+		}
+	} while (neighbours.size() > 1 && min + max > 6);
 
-
-	//	}
-
-
-
-	//} while (lowest + highest > 6);
-	
-	
 
 	return neighbours;
 

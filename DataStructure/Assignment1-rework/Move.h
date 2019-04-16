@@ -28,20 +28,37 @@ public:
 		return (utility > m.utility);
 	}
 
+	void pickTargets(list<Neighbour> targets, int id)
+	{
+		targets.sort(NeighbourOrderComparator(id));
+		for (auto& target : targets)
+		{
+			if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
+			{
+				if (abs(target.pipCount) + captureTotal() == 6)
+					captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
 
+				break;
+			}
+			if (abs(target.pipCount) + captureTotal() <= 6)
+			{
+				captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
+			}
+		}
+	}
 
-	//bool addTarget(string direction, int pipCount)
-	//{
-	//	if (direction.compare("Top") == 0 || direction.compare("Bottom") == 0 || direction.compare("Right") == 0 || direction.compare("Left") == 0)
+	void addTarget (string direction, int pipCount)
+	{
+		//if (direction.compare("Top") == 0 || direction.compare("Bottom") == 0 || direction.compare("Right") == 0 || direction.compare("Left") == 0)
 	//	{
-	//		captureTargets.push_back(Neighbour(direction, pipCount));
-	//		return true;
-	//	}
-	//	else
-	//	{
-	//		return false;
-	//	}
-	//}
+			captureTargets.push_back(Neighbour(direction, pipCount));
+	/*		return true;
+		}
+		else
+		{
+			return false;
+		}*/
+	}
 };
 
 

@@ -44,12 +44,13 @@ public:
 
 
 			tempBoard.addMove(move, id);
-			cout << "X : " << move.x << "Y : " << move.y << endl;
+			
 			move.utility = simulation(tempBoard);
 
 			bestMove.push(move);
 			
 		}
+		cout << " X " << bestMove.top().x << " Y " << bestMove.top().y << " Utility: " << bestMove.top().utility << endl;
 		return bestMove.top();
 	}
 
@@ -84,12 +85,9 @@ public:
 			}
 		}
 		
-			
 			list<Move>::const_iterator moveIt = rMoves.begin();
 			advance(moveIt, rand() % rMoves.size());
 			Move move = *moveIt;
-
-
 
 			list<Neighbour>targets = tempBoard.getTargets(move);
 
@@ -99,26 +97,11 @@ public:
 			}
 			else if (targets.size() > 2)
 			{
-				targets.sort(NeighbourOrderComparator(this->id));
-				for (auto& target : targets)
-				{
-					//ensures that the player doesnt take own square if they can avoid it
-					if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
-					{
-						break;
-					}
-					if (abs(target.pipCount) + move.captureTotal() <= 6)
-					{
-						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
-					}
-				}
+				move.pickTargets(targets, id);
 			}
-
-
 
 			tempBoard.addMove(move, playerId);
 			return expansion(tempBoard, (playerId + 1) % 2);
-		
 	}
 };
 

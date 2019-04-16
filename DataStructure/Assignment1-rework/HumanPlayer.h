@@ -29,15 +29,26 @@ public:
 		} while (!board.isMoveRemaining(move) && !board.isEmptyMove(move));
 
 
-		unordered_map<string, int> targets;
+			unordered_map<string, int> targets;
 			targets = board.getNeighbours(move);
 			unordered_map<string, int>::const_iterator it;
 
-			if (targets.size() > 1)
+
+
+			if (targets.size() == 2)
 			{
+				for (auto& neighbour : targets)
+				{
+					move.addTarget(neighbour.first, neighbour.second);
+				}
+			}
+			if (targets.size() > 2)
+			{
+				bool validInput;
+				cin.ignore(1000, '\n');
 				do
 				{
-					
+					validInput = true;
 					move.captureTargets.clear();
 					cout << "Neighbouring Cells are : " << endl;
 					for (auto& neighbour : targets)
@@ -51,78 +62,23 @@ public:
 					stringstream captureTargets(input);
 					while (captureTargets >> direction)
 					{
-
-
 						it = targets.find(direction);
 						if (it == targets.end())
 						{
+							validInput = false;
 							break;
 						}
-
-				/*		try
-						{
-							move.captureTargets.emplace(direction, targets.at(direction));
-						}
-						catch (const out_of_range& oor)
-						{
-							inputValid = false;
-						}*/
-
-						/*std::unordered_map<std::string, double>::const_iterator got = mymap.find(input);
-
-						if (got == mymap.end())
-							std::cout << "not found";
 						else
-							std::cout << got->first << " is " << got->second;*/
+						{
+							move.addTarget(it->first, it->second);
+						}
 					}
-				} while (!board.isValidMove(move) && it == targets.end());
+
+					
+				} while (!board.isValidMove(move) || !validInput || move.captureTargets.size() < 2 );
 			}
 
 		return move;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		
 		//list<Neighbour>targets = board.getTargets(move);
 
@@ -297,4 +253,7 @@ public:
 	//
 	//
 	//
+
+
+
 };
