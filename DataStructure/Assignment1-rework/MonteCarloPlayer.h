@@ -27,21 +27,8 @@ public:
 			}
 			else if (targets.size() > 2)
 			{
-				targets.sort(NeighbourOrderComparator(this->id));
-				for (auto& target : targets)
-				{
-					//ensures that the player doesnt take own square if they can avoid it
-					if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
-					{
-						break;
-					}
-					if (abs(target.pipCount) + move.captureTotal() <= 6)
-					{
-						move.captureTargets.push_back(Neighbour(target.direction, -target.pipCount));
-					}
-				}
+				move.pickTargets(targets, id);
 			}
-
 
 			tempBoard.addMove(move, id);
 			
@@ -75,7 +62,7 @@ public:
 
 		if (rMoves.empty())
 		{
-			if ((id == 0 && tempBoard.getScore() > 0) || id == 1 && tempBoard.getScore() < 0)
+			if ((playerId == 0 && tempBoard.getScore() > 0) || playerId == 1 && tempBoard.getScore() < 0)
 			{
 				return 1;
 			}

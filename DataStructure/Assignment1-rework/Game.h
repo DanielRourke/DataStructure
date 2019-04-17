@@ -109,7 +109,6 @@ inline void Game::setMode(int playerCombo)
 	case 3:
 		players[0] = new RandomPlayer(0);
 		players[1] = new RandomPlayer(1);
-		cout << playerCombo << endl;
 		break;
 	case 4:
 		players[0] = new RandomPlayer(0);

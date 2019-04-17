@@ -24,6 +24,7 @@ public:
 		{
 			move.pickTargets(targets, id);
 		}
+		cout << " X " << move.x << " Y " << move.y << " Utility: " << move.utility << endl;
 		return move;
 	}
 

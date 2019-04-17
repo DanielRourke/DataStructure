@@ -36,8 +36,6 @@ public:
 			{
 				move.pickTargets(targets, (id + 1) % 2);
 			}
-		
-		//	cout << "Remaining Moves " << tempBoard.getRemainingMoves().size() << endl;
 
 			tempBoard.addMove(move, (id + 1) % 2);
 
