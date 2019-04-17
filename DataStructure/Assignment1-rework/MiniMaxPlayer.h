@@ -34,7 +34,7 @@ public:
 			}
 			else if (targets.size() > 2)
 			{
-				move.pickTargets(targets, id);
+				move.pickTargets(targets, (id + 1) % 2);
 			}
 		
 		//	cout << "Remaining Moves " << tempBoard.getRemainingMoves().size() << endl;

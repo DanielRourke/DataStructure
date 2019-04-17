@@ -135,6 +135,10 @@ inline void Game::setMode(int playerCombo)
 		players[0] = new MonteCarloPlayer(0);
 		players[1] = new MiniMaxDepthPlayer(1);
 		break;
+	case 10:
+		players[0] = new RandomPlayer(0);
+		players[1] = new MiniMaxDepthPlayer(1, 1,"SmartPlayer");
+		break;
 	}
 }
 

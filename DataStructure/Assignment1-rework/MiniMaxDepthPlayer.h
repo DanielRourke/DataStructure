@@ -3,13 +3,17 @@
 class MiniMaxDepthPlayer :
 	public Player
 {
+private:
+	int depth;
 public:
 	MiniMaxDepthPlayer() : Player() {};
-    MiniMaxDepthPlayer(int i, string name = "MiniMaxDepth Player") : Player(i, name) {};
+    MiniMaxDepthPlayer(int i, string name = "MiniMaxDepth Player") : Player(i, name), depth(3){};
+	MiniMaxDepthPlayer(int i, int d, string name = "MiniMaxDepth Player") : Player(i, name), depth(d) {};
 	~MiniMaxDepthPlayer() {};
+
 	Move getMove(const Board &board)
 	{
-		Move ret = maxMove(board, 1000);
+		Move ret = maxMove(board, depth);
 		cout << " X " << ret.x << " Y " << ret.y << " Utility: " << ret.utility << endl;
 		return ret;
 	}
@@ -30,7 +34,7 @@ public:
 			}
 			else if (targets.size() > 2)
 			{
-				move.pickTargets(targets, id);
+				move.pickTargets(targets, (id + 1) % 2);
 			}
 
 			tempBoard.addMove(move, (id + 1) % 2);
@@ -62,8 +66,8 @@ public:
 				}
 			}
 
-			move.utility += move.captureTotal() * 0.01;
-
+			move.utility += move.captureTotal() * 0.001;
+			//cout << "** X " << move.x << " Y " << move.y << " Utility: " << move.utility << endl;
 			bestMove.push(move);
 		}
 
@@ -107,12 +111,14 @@ public:
 					move.utility = tempBoard.getHuristicScore() * -1;
 				}
 			}
-			else if (depth < 0)
+			else if (depth > 0)
 			{
-				move.utility = minMove(tempBoard, depth - 1).utility;
+				move.utility = minMove(tempBoard, depth).utility;
 			}
 			else
 			{
+				//cout << "depth reached" << endl;
+
 				if (id == 0)
 				{
 					move.utility = tempBoard.getHuristicScore() * 0.1;

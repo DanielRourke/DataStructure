@@ -97,7 +97,7 @@ public:
 			}
 			else if (targets.size() > 2)
 			{
-				move.pickTargets(targets, id);
+				move.pickTargets(targets, playerId);
 			}
 
 			tempBoard.addMove(move, playerId);

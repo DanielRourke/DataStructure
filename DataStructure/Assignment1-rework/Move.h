@@ -33,7 +33,7 @@ public:
 		targets.sort(NeighbourOrderComparator(id));
 		for (auto& target : targets)
 		{
-			if (targets.size() >= 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
+			if (captureTargets.size() > 2 && ((id == 0 && target.pipCount > 0) || (id == 1 && target.pipCount < 0)))
 			{
 				if (abs(target.pipCount) + captureTotal() == 6)
 					captureTargets.push_back(Neighbour(target.direction, -target.pipCount));

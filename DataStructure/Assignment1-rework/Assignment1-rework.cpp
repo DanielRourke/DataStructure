@@ -44,11 +44,12 @@ srand((int)time(NULL));
 			<< "6. MonteCarlo Vs MiniMax" << endl
 			<< "7. Random Vs MiniMaxDepth" << endl
 			<< "8. MiniMax Vs MiniMaxDepth" << endl
-			<< "9. MonteCarlo Vs MiniMaxDepth" << endl;
+			<< "9. MonteCarlo Vs MiniMaxDepth" << endl
+			<< "10. Random vs Smart" << endl;
 
 		cin >> gameMode;
 
-	} while (gameMode < 1 || gameMode >9);
+	} while (gameMode < 1 || gameMode >10);
 	
 	Game game(row, col, gameMode);
 	game.play();
