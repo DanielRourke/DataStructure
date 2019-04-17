@@ -380,7 +380,6 @@ list<Neighbour> Board::getTargets(Move move) const
 		while (abs(targets.front().pipCount) + abs(targets.back().pipCount) > 6 && targets.size() > 1)
 		{
 			targets.pop_back();
-			targets.sort(NeighbourAbsComparator());
 		}
 		targets.sort();
 	}
