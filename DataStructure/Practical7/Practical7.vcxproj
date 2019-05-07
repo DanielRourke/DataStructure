@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{5C61D532-12BB-48DC-BB5C-6B2E9A09E99C}</ProjectGuid>
+    <ProjectGuid>{77427897-F3A9-47C6-87C5-DFB60497BAAA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Assignment1rework</RootNamespace>
+    <RootNamespace>Practical7</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,26 +151,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="HumanPlayer.h" />
-    <ClInclude Include="MiniMaxDepthPlayer.h" />
-    <ClInclude Include="MiniMaxPlayer.h" />
-    <ClInclude Include="MonteCarloPlayer.h" />
-    <ClInclude Include="Move.h" />
-    <ClInclude Include="Neighbour.h" />
+    <ClInclude Include="binarySearchTree.h" />
+    <ClInclude Include="binaryTree.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="RandomPlayer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Assignment1-rework.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Practical7.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

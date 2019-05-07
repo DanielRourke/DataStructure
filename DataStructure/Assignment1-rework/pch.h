@@ -20,9 +20,13 @@
 #include <sstream>
 #include <cmath>
 #include <map>
-
+#include <queue>
 using namespace std;
 
+#define TOP = "Top"
+#define BOTTOM = "Bottom"
+#define RIGHT = "Right"
+#define LEFT = "Left"
 
 #include "time.h"
 

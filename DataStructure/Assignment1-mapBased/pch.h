@@ -9,6 +9,7 @@
 #ifndef PCH_H
 #define PCH_H
 
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -16,12 +17,12 @@
 #include <algorithm>
 #include <cstdlib>
 #include <string>
+#include <unordered_map>
+#include <sstream>
+#include <cmath>
+#include <string>
 #include <queue>
-using namespace std;
-
-
-
-
-// TODO: add headers that you want to pre-compile here
+#include "time.h"
+using  namespace std;
 
 #endif //PCH_H

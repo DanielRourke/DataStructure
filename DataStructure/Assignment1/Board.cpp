@@ -81,7 +81,7 @@ void Board::printBoard() {
 //	}
 //}
 
-unordered_map<string, int> Board::getNeighbours(Move move)
+unordered_map<string, int> Board::getNeighbours(Move move) const
 {
 	unordered_map<string, int> neighbours;
 

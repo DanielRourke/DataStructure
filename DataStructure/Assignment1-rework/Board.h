@@ -6,7 +6,7 @@ class Board
 private:
 	int row, col;
 	unordered_map<int, int> grid;
-	list<Move> remaingMoves;
+	list<Move> remainingMoves;
 public:
 	Board();
 	~Board();
@@ -15,19 +15,25 @@ public:
 	void printBoard();
 	//bool isValidMove(int move) const;
 	bool isValidMove(Move move) const;
+	bool isMoveRemaining(Move move) const;
+	bool isTargetsValid(list<Neighbour> targets) const;
+	bool isEmptyMove(Move move) const;
 	int boardMove(int, int) const;
-	void addMove(int, int);
-	void addMove(Move);
-	unordered_map<string, int> getNeighbours(Move move);
-	map<string, int> getTargets(Move move) const;
-	bool isInBounds(int x, int y) const;
+	void addMove(Move, int);
+	unordered_map<string, int> getNeighbours(Move move) const;
+	list<Neighbour> getTargets(Move move) const;
 	int captureTargets(Move);
 	int countTargets(Move) const;
 	Move getMove(int) const;
 	Move getRandomMove() const;
-	bool isGameOver();
-};
+	list<Move> getRemainingMoves() const;
+	int getScore()const;
+	void resetBoard(int r, int c);
+	double getHuristicScore() const;
 
+
+	//bool isGameOver();
+};
 
 Board::Board(int r, int c) {
 	row = r;
@@ -41,15 +47,42 @@ Board::Board(int r, int c) {
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < col; j++)
 		{
-			remaingMoves.push_back(Move(i, j));
+			remainingMoves.push_back(Move(i, j));
+		}
+}
+inline void Board::resetBoard(int r, int c)
+{
+	row = r;
+	col = c;
+	grid.clear();
+	remainingMoves.erase(remainingMoves.begin(), remainingMoves.end());
+
+	for (int i = 0; i < row * col; i++)
+	{
+		grid.emplace(i, 0);
+	}
+
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < col; j++)
+		{
+			remainingMoves.push_back(Move(i, j));
 		}
 }
 
 
+
+Board::Board(const Board& cboard)
+{
+	row = cboard.row;
+	col = cboard.col;
+
+	grid = cboard.grid;
+	remainingMoves = cboard.remainingMoves;
+}
+
 Board::Board()
 {
 }
-
 
 Board::~Board()
 {
@@ -157,66 +190,198 @@ inline void Board::printBoard()
 	cout << (char)188 << endl;
 }
 
+inline bool Board::isTargetsValid(list<Neighbour> targets) const
+{
+	int pipCountTotal = 0;
+	for (auto& target : targets)
+	{
+		if (target.direction.compare("Top") != 0 && target.direction.compare("Bottom") != 0 && target.direction.compare("Right") != 0 && target.direction.compare("Left") != 0)
+		{
+			return false;
+		}
+		pipCountTotal += abs(target.pipCount);
+	}
 
-inline bool Board::isValidMove(Move move) const
+
+	if (pipCountTotal > 6)
+	{
+		return false;
+	}
+
+	if (targets.size() == 1 || targets.size() > 4)
+	{
+		return false;
+	}
+
+
+	return true;
+}
+
+inline bool Board::isEmptyMove(Move move) const
 {
 	return  move.x < row  && move.x >= 0 && move.y < col && move.y >= 0 && grid.at(move.x * col + move.y) == 0;
 }
 
+inline bool Board::isMoveRemaining(Move move) const
+{
+	for (auto& remainingMove : remainingMoves)
+	{
+		if (remainingMove == move && grid.at(move.x * col + move.y) == 0)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+inline bool Board::isValidMove(Move move) const
+{
+	return  (isEmptyMove(move) && isMoveRemaining(move) && isTargetsValid(move.captureTargets));
+}
 
 inline int Board::boardMove(int i, int j) const
 {
 	return i * col + j;
 }
 
-
 inline Move Board::getMove(int k) const
 {
 	return  Move(k / col, k % col);
 }
 
-inline void Board::addMove(Move move)
+inline void Board::addMove(Move move, int playerIndex)
 {
 	int pipCount = 1;
+
 	if (captureTargets(move) > 0)
 	{
 		pipCount = captureTargets(move);
 	}
-	if (move.player == 0)
+	if (playerIndex == 0)
 	{
 		grid[move.x * col + move.y] = pipCount;
 	}
-	else if (move.player == 1)
+	else if (playerIndex == 1)
 	{
 		grid[move.x * col + move.y] = -pipCount;
 	}
 
-	remaingMoves.remove(move);
+	remainingMoves.remove(move);
 }
 
 
-map<string, int> Board::getTargets(Move move) const
+unordered_map<string, int> Board::getNeighbours(Move move) const
 {
-	map<string, int> targets;
+	unordered_map<string, int> neighbours;
+
 
 	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x + 1) * col + move.y)) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
 	{
-		targets.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
+		neighbours.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
 	}
 
 	if (move.x - 1 < row  && move.x - 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x - 1) * col + move.y)) < 6 && grid.at((move.x - 1) * col + move.y) != 0)
 	{
-		targets.emplace("Top", grid.at((move.x - 1) * col + move.y));
+		neighbours.emplace("Top", grid.at((move.x - 1) * col + move.y));
 	}
 
 	if (move.x < row  && move.x >= 0 && move.y + 1 < col && move.y + 1 >= 0 && abs(grid.at(move.x * col + (move.y + 1))) < 6 && grid.at(move.x * col + (move.y + 1)) != 0)
 	{
-		targets.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
+		neighbours.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
 	}
 
 	if (move.x < row  && move.x >= 0 && move.y - 1 < col && move.y - 1 >= 0 && abs(grid.at(move.x * col + (move.y - 1))) < 6 && grid.at(move.x * col + (move.y - 1)) != 0)
 	{
-		targets.emplace("Left", grid.at(move.x * col + (move.y - 1)));
+		neighbours.emplace("Left", grid.at(move.x * col + (move.y - 1)));
+	}
+
+	int min = 7;
+	int max = 0;
+	do
+	{
+		unordered_map<string, int>::const_iterator it;
+		//find min
+		min = 7;
+		string minDirection;
+		for (auto& neighbour : neighbours)
+		{
+			if (abs(neighbour.second) < min)
+			{
+				min = abs(neighbour.second);
+				minDirection = neighbour.first;
+			}
+		}
+
+		//findmax
+		max = 0;
+		string maxDirection;
+		for (auto& neighbour : neighbours)
+		{
+			if (abs(neighbour.second) < max)
+			{
+				max = abs(neighbour.second);
+				maxDirection = neighbour.first;
+			}
+		}
+
+		if (min + max > 6)
+		{
+			it = neighbours.find(maxDirection);
+			if (it == neighbours.end())
+			{
+				cout << "something whent wrong!" << endl;
+			}
+			else
+			{
+				neighbours.erase(it);
+			}
+		}
+	} while (neighbours.size() > 1 && min + max > 6);
+
+
+	return neighbours;
+
+}
+
+
+list<Neighbour> Board::getTargets(Move move) const
+{
+	list<Neighbour> targets;
+
+	if (move.x + 1 < row  && move.x + 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x + 1) * col + move.y)) < 6 && grid.at((move.x + 1) * col + move.y) != 0)
+	{
+		//targets.emplace("Bottom", grid.at((move.x + 1) * col + move.y));
+		targets.push_back(Neighbour("Bottom", grid.at((move.x + 1) * col + move.y)));
+	}
+
+	if (move.x - 1 < row  && move.x - 1 >= 0 && move.y < col && move.y >= 0 && abs(grid.at((move.x - 1) * col + move.y)) < 6 && grid.at((move.x - 1) * col + move.y) != 0)
+	{
+		//targets.emplace("Top", grid.at((move.x - 1) * col + move.y));
+		targets.push_back(Neighbour("Top", grid.at((move.x - 1) * col + move.y)));
+	}
+
+	if (move.x < row  && move.x >= 0 && move.y + 1 < col && move.y + 1 >= 0 && abs(grid.at(move.x * col + (move.y + 1))) < 6 && grid.at(move.x * col + (move.y + 1)) != 0)
+	{
+		//targets.emplace("Right", grid.at(move.x  * col + (move.y + 1)));
+		targets.push_back(Neighbour("Right", grid.at(move.x  * col + (move.y + 1))));
+	}
+
+	if (move.x < row  && move.x >= 0 && move.y - 1 < col && move.y - 1 >= 0 && abs(grid.at(move.x * col + (move.y - 1))) < 6 && grid.at(move.x * col + (move.y - 1)) != 0)
+	{
+		//targets.emplace("Left", grid.at(move.x * col + (move.y - 1)));
+		targets.push_back(Neighbour("Left", grid.at(move.x * col + (move.y - 1))));
+	}
+
+
+	if (targets.size() >= 2)
+	{
+		targets.sort(NeighbourAbsComparator());
+		while (abs(targets.front().pipCount) + abs(targets.back().pipCount) > 6 && targets.size() > 1)
+		{
+			targets.pop_back();
+		}
+		targets.sort();
 	}
 
 	return targets;
@@ -229,25 +394,25 @@ inline int Board::captureTargets(Move move)
 
 	for (auto& target : move.captureTargets)
 	{
-		if (target.first == "Top")
+		if (target.direction == "Top")
 		{
 			grid.at((move.x - 1) * col + move.y) = 0;
-			remaingMoves.push_back(Move(move.x - 1, move.y));
+			remainingMoves.push_back(Move(move.x - 1, move.y));
 		}
-		else if (target.first == "Bottom")
+		else if (target.direction == "Bottom")
 		{
 			grid.at((move.x + 1) * col + move.y) = 0;
-			remaingMoves.push_back(Move(move.x + 1, move.y));
+			remainingMoves.push_back(Move(move.x + 1, move.y));
 		}
-		else if (target.first == "Right")
+		else if (target.direction == "Right")
 		{
 			grid.at(move.x  * col + (move.y + 1)) = 0;
-			remaingMoves.push_back(Move(move.x , move.y + 1));
+			remainingMoves.push_back(Move(move.x , move.y + 1));
 		}
-		else if (target.first == "Left")
+		else if (target.direction == "Left")
 		{
 			grid.at(move.x * col + (move.y - 1)) = 0;
-			remaingMoves.push_back(Move(move.x , move.y - 1));
+			remainingMoves.push_back(Move(move.x , move.y - 1));
 		}
 	}
 
@@ -260,7 +425,7 @@ inline int Board::countTargets(Move move) const
 
 	for (auto& target : move.captureTargets)
 	{
-		pipCount += abs(target.second);
+		pipCount += abs(target.pipCount);
 	}
 
 	return pipCount;
@@ -268,13 +433,59 @@ inline int Board::countTargets(Move move) const
 
 inline Move Board::getRandomMove() const
 {
-	list<Move>::const_iterator moveIt = remaingMoves.begin();
-	advance(moveIt, rand() % remaingMoves.size());
-	return *moveIt;
 
 }
 
-inline bool Board::isGameOver()
+inline list<Move> Board::getRemainingMoves() const
 {
-	return remaingMoves.size() > 0;
+	return remainingMoves;
 }
+
+
+inline int Board::getScore() const
+{
+	int total = 0;
+	for (auto& cell : grid)
+	{
+		if (cell.second > 0)
+		{
+			total++;
+		}
+		else if (cell.second < 0)
+		{
+			total--;
+		}
+	}
+	return total;
+}
+
+inline double Board::getHuristicScore() const
+{
+	double total = 0;
+	for (auto& cell : grid)
+	{
+		if (cell.second == 6)
+		{
+			total += 1;
+		}
+		else if (cell.second == -6)
+		{
+			total -=1;
+		}
+
+		if (cell.second > 0)
+		{
+			total += 0.1;
+		}
+		else if (cell.second < 0)
+		{
+			total -= 0.1;
+		}
+
+	}
+
+	return total;
+}
+
+
+

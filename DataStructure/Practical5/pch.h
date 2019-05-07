@@ -9,19 +9,6 @@
 #ifndef PCH_H
 #define PCH_H
 
-#include <iostream>
-#include <list>
-#include <vector>
-#include <stack>
-#include <algorithm>
-#include <cstdlib>
-#include <string>
-#include <queue>
-using namespace std;
-
-
-
-
 // TODO: add headers that you want to pre-compile here
 
 #endif //PCH_H
