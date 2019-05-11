@@ -281,10 +281,13 @@ int binaryTreeType<elemType>::nodeCount(binaryTreeNode<elemType> *p) const
 template<class elemType>
 int binaryTreeType<elemType>::leavesCount(binaryTreeNode<elemType> *p) const
 {
-    cout << "Write the definition of the function leavesCount"
-         << endl;
-
-    return 0;
+	//if both points are null ADD one.
+	if (p == NULL)
+		return 0;
+	else if (p->llink == NULL && p->rlink == NULL)
+		return 1;
+	else 
+		return leavesCount(p->llink) + leavesCount(p->rlink);
 }
 
 #endif

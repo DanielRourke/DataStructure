@@ -38,6 +38,9 @@ int main()
 	cout << "Number of Nodes: "
 		<< treeRoot.treeNodeCount() << endl;
 	cout << endl;
+	cout << "Number of Leaves: "
+		<< treeRoot.treeLeavesCount() << endl;
+	cout << endl;
 
 	cout << "Enter item to be search: ";
 	cin >> num;

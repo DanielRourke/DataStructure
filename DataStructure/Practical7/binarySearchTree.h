@@ -76,7 +76,7 @@ template <class elemType>
 void bSearchTreeType<elemType>::insert(const elemType& insertItem)
 {
     binaryTreeNode<elemType> *current;  //pointer to traverse the tree
-    binaryTreeNode<elemType> *trailCurrent; //pointer behind current
+    binaryTreeNode<elemType> *trailCurrent = NULL; //pointer behind current
     binaryTreeNode<elemType> *newNode;  //pointer to create the node
 
     newNode = new binaryTreeNode<elemType>;
