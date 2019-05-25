@@ -41,18 +41,19 @@ inline bool CustomString::operator<(CustomString& other)
 {
 	for (int i = 0; i < this->val.length() || i < other.val.length(); i++)
 	{
-		if (other.val[i] == '\0' || this->val[i] > other.val[i])
-		{
-			return false;
-		}
-		else if (this->val[i] == '\0')
+		if (this->val[i] == '\0' || this->val[i] < other.val[i])
 		{
 			return true;
+		}
+		else if (other.val[i] == '\0' || this->val[i] > other.val[i])
+		{
+			return false;
 		}
 
 	}
 
-	return (this->val.length() != other.val.length());
+	//return (this->val.length() != other.val.length());
+	return false;
 
 }
 
@@ -61,19 +62,18 @@ inline bool CustomString::operator>(CustomString& other)
 
 	for (int i = 0; i < this->val.length() || i < other.val.length(); i++)
 	{
-		if (this->val[i] == '\0' || this->val[i] < other.val[i])
-		{
-			return false;
-		}
-		else if (other.val[i] == '\0')
+		if (other.val[i] == '\0' || this->val[i] > other.val[i])
 		{
 			return true;
+		}
+		else if (this->val[i] == '\0' || this->val[i] < other.val[i])
+		{
+			return false;
 		}
 
 	}
 
-	return (this->val.length() != other.val.length());
-
+	return false;
 
 }
 

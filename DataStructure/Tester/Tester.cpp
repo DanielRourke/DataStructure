@@ -7,9 +7,10 @@
 
 int main()
 {
-	CustomString one("a");
-	CustomString two("abc");
-	CustomString three("abc");
+	cout << "working" << endl;
+	CustomString one("abc");
+	CustomString two("aba");
+	CustomString three("abc ");
 
 
 	if(one < two)

@@ -19,7 +19,24 @@ struct DATA
 		else
 			info = 1;
 	}
+
 };
+
+
+
+//struct DATA
+//{
+//	int key;
+//	float info;
+//	void update() {
+//		if (info != NULL)
+//			info += 1;
+//		else
+//			info = 1;
+//	}
+//
+//};
+
 
 ostream& operator<<(ostream& os, const CustomString cs)
 {
@@ -39,6 +56,7 @@ void print(DATA ss)
 
 int main()
 {
+
 	AvlTree<DATA, CustomString> tree;
 	ifstream readf("article.txt");
 
@@ -61,13 +79,14 @@ int main()
 		{
 			if (isalpha(c))
 			{
-				word += c;
+				word += tolower(c);
 			}
 			else if (c == ' ' || readf.peek() == EOF)
 			{
 				newItem.info = 1;
 				newItem.key = word;
 			//	cout << word << " " << endl;
+				//tree.AVL_Insert(newItem);
 				tree.AVL_Update(word , newItem);
 				word = "";
 			}
