@@ -15,5 +15,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <iomanip>
+#include <queue>
+#include <vector>
 
 #endif //PCH_H

@@ -837,7 +837,7 @@ void  AvlTree<TYPE, KTYPE> ::  _print (NODE<TYPE> *root,
  /* Statements */
  	if (root)
  		{
-		 _print ( root->right, level + 1 );
+	
 	 
 	     cout << "bal "     << setw(3) << root->bal 
 	          << ": Level " << setw(3) << level;
@@ -853,6 +853,7 @@ void  AvlTree<TYPE, KTYPE> ::  _print (NODE<TYPE> *root,
   		    cout << " (EH)\n";
   		    
  		 _print ( root->left, level + 1 );
+		 _print(root->right, level + 1);
  		} /* if */
  
  } /* AVL_Print */

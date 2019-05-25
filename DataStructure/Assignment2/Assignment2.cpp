@@ -7,7 +7,6 @@
 
 using namespace std;
 
-bool readFile(string filename);
 
 struct DATA
 {
@@ -19,10 +18,14 @@ struct DATA
 		else
 			info = 1;
 	}
+	bool operator<(const DATA d) const{
+		return (info < d.info); //Check if the direction is correct
+	}
 
 };
 
 
+bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree);
 
 //struct DATA
 //{
@@ -44,10 +47,7 @@ ostream& operator<<(ostream& os, const CustomString cs)
 	return os;
 }
 
-bool readFile(string filename)
-{
-	return true;
-}
+
 
 void print(DATA ss) 
 {
@@ -56,20 +56,50 @@ void print(DATA ss)
 
 int main()
 {
-
+	
 	AvlTree<DATA, CustomString> tree;
-	ifstream readf("article.txt");
+
+	addFileToTree("article.txt", &tree);
+
+	string min = "";
+	cout << "Please enter a word to search for" << endl;
+	cin >> min;
+	string max = "";
+
+	priority_queue<DATA> results;
+
+	//TODO : rollover z
+	results = tree.AVL_RetrieveInRange(min, max += min[0] + 1);
+
+	while (!results.empty())
+	{
+		
+		cout << "Key: " << results.top().key << "  Fequency: " << results.top().info << endl;
+		results.pop();
+	}
+
+	//tree.AVL_Print();
+	//cout << endl;
+
+	//tree.AVL_Traverse(print);
+}
+
+
+
+bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree)
+{
+	ifstream readf(filename);
 
 	if (!readf.is_open())
 	{
 		cout << "Error opening file" << endl;
-		return -1;
+		return false;
 	}
 	else
 	{
 
 		cout << "Opened file: " << endl;
-		if (tree.AVL_Empty())
+		if ((*tree).AVL_Empty())
 			cout << "Empty tree." << endl;
 
 		DATA newItem;
@@ -85,21 +115,29 @@ int main()
 			{
 				newItem.info = 1;
 				newItem.key = word;
-			//	cout << word << " " << endl;
-				//tree.AVL_Insert(newItem);
-				tree.AVL_Update(word , newItem);
+				(*tree).AVL_Update(word, newItem);
 				word = "";
 			}
 		}
 
-
-		tree.AVL_Print();
-		cout << endl;
-
-		tree.AVL_Traverse(print);
+		cout << "File added to tree." << endl;
 
 	}
+	return true;
 }
 
-
-
+//template <class TYPE>
+//bool addEntryToHeap(TYPE data)
+//{
+//	//for the length of string
+//	for (int i = 0; i < input.length(); i++)
+//	{
+//		if (data.key[i] != input[i])
+//		{
+//			return false;
+//		}
+//	}
+//	
+//	//
+//
+//}

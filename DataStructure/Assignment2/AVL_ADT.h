@@ -55,6 +55,14 @@ class AvlTree
 //  	The following function is used for debugging.
 	    void  _print      (NODE<TYPE> *root, int   level);
 
+		
+
+		//returning data items in a range
+		void _retrieveInRange		(NODE<TYPE> *root,
+									 KTYPE       minKey,
+									 KTYPE		 maxKey,
+									 priority_queue<TYPE> *heap);
+
 	 public:
 	          AvlTree (void);
 			  virtual ~AvlTree  (void);
@@ -70,6 +78,9 @@ class AvlTree
 	    
 //      The following function is used for debugging.
 	    void  AVL_Print    (void);
+
+
+		priority_queue<TYPE> AVL_RetrieveInRange(KTYPE minKey, KTYPE maxKey);
 	} ; // class AvlTree
 	
 /*	=================== Constructor ===================	
@@ -858,6 +869,38 @@ void  AvlTree<TYPE, KTYPE> ::  _print (NODE<TYPE> *root,
  } /* AVL_Print */
 
 
+/* Retrieve In Range*/
+template<class TYPE, class KTYPE>
+inline priority_queue<TYPE> AvlTree<TYPE, KTYPE>::AVL_RetrieveInRange(KTYPE		  minKey,
+													  KTYPE		  maxKey)
+{
+	priority_queue<TYPE> heap;
+	if (tree) 
+		_retrieveInRange(tree, minKey, maxKey, &heap);
+		
+	return heap;
+}   /* Retrieve In Range*/
+
+
+template<class TYPE, class KTYPE>
+inline void AvlTree<TYPE, KTYPE>::_retrieveInRange(NODE<TYPE>* root,
+												  KTYPE		  minKey,
+												  KTYPE		  maxKey,
+										priority_queue<TYPE>* heap)
+{											  
+	if (root)
+	{
+		if (root->data.key > minKey)
+			_retrieveInRange(root->left, minKey, maxKey, heap);
+		if (root->data.key < maxKey)
+			_retrieveInRange(root->right, minKey, maxKey, heap);
+		if (root->data.key > minKey && root->data.key < maxKey)
+			(*heap).push(root->data);
+	}
+
+}
+
+
 template <class TYPE, class KTYPE>
 bool   AvlTree<TYPE, KTYPE>
 ::AVL_Update(KTYPE key, TYPE dataIn )
@@ -898,3 +941,57 @@ bool   AvlTree<TYPE, KTYPE>
 	//	return AVL_Insert(dataIn);
 	//}
 }
+
+
+
+/*
+	template <class TYPE, class KTYPE>
+void  AvlTree<TYPE, KTYPE> 
+  ::  _traversal (void(*process)(TYPE dataproc),
+                  NODE<TYPE> *root)
+{
+//	Statements 
+	if (root)
+	   {
+	    _traversal  (process, root->left);
+	    process     (root->data);
+	    _traversal  (process, root->right);
+	   } //  if 
+	return;
+}
+//	Statements
+
+
+
+
+	if (root)
+		{
+		if(root->data.key > minKey)
+			goleft
+		if(root->data.key > minKey && root->data.key < maxKey)
+			procces this node
+		if (root->data.key < maxKey)
+			goright
+		
+		
+		
+
+		{
+
+
+		}
+		 if (key < root->data.key)
+			 return _retrieve (key, root->left);
+		 else if (key > root->data.key)
+			 return _retrieve (key, root->right);
+		 else
+			 // Found equal key
+			 return (root);
+		} // if root
+	else
+		//Data not in tree
+		return root;
+}	//  _retrieve
+
+*/
+

@@ -10,9 +10,9 @@ public:
 	CustomString();
 	CustomString(string);
 	~CustomString();
-	bool operator<(CustomString&);
-	bool operator>(CustomString&);
-	bool operator==(CustomString&);
+	bool operator<(const CustomString&) const;
+	bool operator>(const CustomString&) const;
+	bool operator==(const CustomString&) const;
 	void operator=(string&);
 	friend ostream & operator <<(ostream& os, const CustomString cs);
 };
@@ -37,7 +37,7 @@ CustomString::~CustomString()
 //when using tree will clean words to not contain UpperCase
 //attempting to compare strings in lexicographic order
 
-inline bool CustomString::operator<(CustomString& other)
+inline bool CustomString::operator<(const CustomString& other) const
 {
 	for (int i = 0; i < this->val.length() || i < other.val.length(); i++)
 	{
@@ -57,7 +57,7 @@ inline bool CustomString::operator<(CustomString& other)
 
 }
 
-inline bool CustomString::operator>(CustomString& other)
+inline bool CustomString::operator>(const CustomString& other) const
 {
 
 	for (int i = 0; i < this->val.length() || i < other.val.length(); i++)
@@ -77,7 +77,7 @@ inline bool CustomString::operator>(CustomString& other)
 
 }
 
-inline bool CustomString::operator==(CustomString& other)
+inline bool CustomString::operator==(const CustomString& other) const
 {
 	if (this->val.length() == other.val.length())
 	{
