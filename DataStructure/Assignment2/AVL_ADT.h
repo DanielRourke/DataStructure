@@ -1,3 +1,6 @@
+#include "pch.h"
+#include "CustomString.h"
+using namespace std;
 //	==================== MACROS ====================
 #define LH +1     // Left High 
 #define EH  0     // Even High 
@@ -54,8 +57,9 @@ class AvlTree
 
 	 public:
 	          AvlTree (void);
-	         ~AvlTree  (void); 
+			  virtual ~AvlTree  (void);
 	    bool  AVL_Insert   (TYPE   dataIn); 
+		bool  AVL_Update   (KTYPE  key,     TYPE   dataIn);
 	    bool  AVL_Delete   (KTYPE  dltKey);
 	    bool  AVL_Retrieve (KTYPE  key,     TYPE& dataOut);
 	    void  AVL_Traverse (void (*process)(TYPE  dataProc)); //in-order
@@ -852,3 +856,45 @@ void  AvlTree<TYPE, KTYPE> ::  _print (NODE<TYPE> *root,
  		} /* if */
  
  } /* AVL_Print */
+
+
+template <class TYPE, class KTYPE>
+bool   AvlTree<TYPE, KTYPE>
+::AVL_Update(KTYPE key, TYPE dataIn )
+{
+	//	Local Definitions
+	NODE<TYPE> *node;
+
+
+	if (!tree)
+		return AVL_Insert(dataIn);
+
+	node = _retrieve(key, tree);
+	if (node && node != tree)
+	{
+		node->data.update();
+		return true;
+	} // if found
+	else
+		return AVL_Insert(dataIn);
+
+
+
+
+	//if tree is not empty try find data
+	//if found update frequency amount
+	//if (tree)
+	//{
+	//	node = _retrieve(key, tree);
+	//}
+
+	//if (node)
+	//{
+	//	node->data.update();
+	//	return true;
+	//} // else insert new data node
+	//else
+	//{
+	//	return AVL_Insert(dataIn);
+	//}
+}
