@@ -59,7 +59,27 @@ int main()
 	
 	AvlTree<DATA, CustomString> tree;
 
-	addFileToTree("article.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_1.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_1.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_2.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_2.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_3.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_3.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_4.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_4.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_5.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_5.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_6.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_6.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_7.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_7.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_8.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_8.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_9.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_9.txt", &tree);
+	cout << "Trying to Open " << "\\Textfiles\\AI_articles_10.txt" << endl;
+	addFileToTree("Textfiles/AI_articles_10.txt", &tree);
+
 
 	string min = "";
 	cout << "Please enter a word to search for" << endl;
@@ -71,9 +91,8 @@ int main()
 	//TODO : rollover z
 	results = tree.AVL_RetrieveInRange(min, max += min[0] + 1);
 
-	while (!results.empty())
+	for (int i = 0; i < 5 && !results.empty(); i++)
 	{
-		
 		cout << "Key: " << results.top().key << "  Fequency: " << results.top().info << endl;
 		results.pop();
 	}
@@ -107,6 +126,10 @@ bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree)
 		char c;
 		while ((c = readf.get()) != EOF)
 		{
+			if (c > 255 || c < 0)
+			{
+				continue;
+			}
 			if (isalpha(c))
 			{
 				word += tolower(c);

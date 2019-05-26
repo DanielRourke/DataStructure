@@ -900,7 +900,6 @@ inline void AvlTree<TYPE, KTYPE>::_retrieveInRange(NODE<TYPE>* root,
 
 }
 
-
 template <class TYPE, class KTYPE>
 bool   AvlTree<TYPE, KTYPE>
 ::AVL_Update(KTYPE key, TYPE dataIn )
