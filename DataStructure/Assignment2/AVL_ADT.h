@@ -62,12 +62,14 @@ class AvlTree
 									 KTYPE       minKey,
 									 KTYPE		 maxKey,
 									 priority_queue<TYPE> *heap);
-
+		NODE<TYPE>* _pruneTree(float threshold, NODE<TYPE>* root);
 	 public:
 	          AvlTree (void);
 			  virtual ~AvlTree  (void);
 	    bool  AVL_Insert   (TYPE   dataIn); 
 		bool  AVL_Update   (KTYPE  key,     TYPE   dataIn);
+		void  AVL_PruneTree(float threshold);
+
 	    bool  AVL_Delete   (KTYPE  dltKey);
 	    bool  AVL_Retrieve (KTYPE  key,     TYPE& dataOut);
 	    void  AVL_Traverse (void (*process)(TYPE  dataProc)); //in-order
@@ -902,7 +904,7 @@ inline void AvlTree<TYPE, KTYPE>::_retrieveInRange(NODE<TYPE>* root,
 
 template <class TYPE, class KTYPE>
 bool   AvlTree<TYPE, KTYPE>
-::AVL_Update(KTYPE key, TYPE dataIn )
+::AVL_Update(KTYPE key, TYPE dataIn)
 {
 	//	Local Definitions
 	NODE<TYPE> *node;
@@ -920,7 +922,52 @@ bool   AvlTree<TYPE, KTYPE>
 	else
 		return AVL_Insert(dataIn);
 
+}
 
+template <class TYPE, class KTYPE>
+void  AvlTree <TYPE, KTYPE> ::AVL_PruneTree(float threshold)
+{
+	//	Statements 
+	tree = _pruneTree(threshold, tree);
+}	// AVL_PruneTree
+
+template <class TYPE, class KTYPE>
+NODE<TYPE>*  AvlTree<TYPE, KTYPE>
+::_pruneTree(float threshold,
+	NODE<TYPE> *root)
+{
+
+	NODE<TYPE>  *newRoot;
+	bool shorter = false;
+	bool success = false;
+
+	if (root->left)
+		root->left = _pruneTree(threshold, root->left);
+	if (root->right)
+		root->right = _pruneTree(threshold, root->right);
+
+	if (root->left  && root->left->data.info < threshold)
+	{
+		newRoot = _delete(root, root->left->data.key, shorter, success);
+		if (success)
+		{
+			count--;
+			return _pruneTree(threshold, newRoot);
+		}
+	}
+	else if (root->right && root->right->data.info < threshold)
+	{
+		newRoot = _delete(root, root->right->data.key, shorter, success);
+		if (success)
+		{
+			count--;
+			return _pruneTree(threshold, newRoot);
+		}
+	}
+	
+
+		return root;
+}
 
 
 	//if tree is not empty try find data
@@ -939,7 +986,7 @@ bool   AvlTree<TYPE, KTYPE>
 	//{
 	//	return AVL_Insert(dataIn);
 	//}
-}
+
 
 
 
@@ -993,4 +1040,145 @@ void  AvlTree<TYPE, KTYPE>
 }	//  _retrieve
 
 */
+
+
+
+//
+//template <class TYPE, class KTYPE>
+//bool  AvlTree <TYPE, KTYPE> ::_prune(TYPE dataproc)
+//{
+//	//	Local Definitions 
+//	bool shorter;
+//	bool success;
+//
+//
+//	NODE<TYPE>  *newRoot;
+//
+//	//	Statements 
+//	newRoot = _delete(tree, dltKey, shorter, success);
+//	if (success)
+//	{
+//		tree = newRoot;
+//		count--;
+//	} // if 
+//	return success;
+//}	// 
+
+
+/*	===================== _traversalPre =====================
+	Traverse tree using inorder traversal. To process a
+	node, we use the function passed when traversal is called.
+	   Pre   tree has been created (may be null)
+	   Post  all nodes processed
+*/
+
+//template <class TYPE, class KTYPE>
+//void  AvlTree<TYPE, KTYPE>
+//::_traversalPre(void(*process)(TYPE dataproc),
+//	NODE<TYPE> *root)
+//{
+//	//	Statements 
+//	if (root)
+//	{
+//		 process(root->data);
+//		_traversal(process, root->left);
+//		_traversal(process, root->right);
+//	} //  if 
+//	return;
+//}	//  _traversal 
+
+/*	===================== _traversalPost=====================
+	Traverse tree using inorder traversal. To process a
+	node, we use the function passed when traversal is called.
+	   Pre   tree has been created (may be null)
+	   Post  all nodes processed
+*/
+
+//template <class TYPE, class KTYPE>
+//void  AvlTree<TYPE, KTYPE>
+//::_traversalPost(void(*process)(TYPE dataproc),
+//	NODE<TYPE> *root)
+//{
+//	//	Statements 
+//	if (root)
+//	{
+//		_traversal(process, root->left);
+//		_traversal(process, root->right);
+//		process(root->data);
+//	} //  if 
+//	return;
+//}	//  _traversal 
+
+//
+//template <class TYPE, class KTYPE>
+//void  AvlTree<TYPE, KTYPE>
+//::_traversalPost(void(*process)(TYPE dataproc),
+//	NODE<TYPE> *root)
+//{
+//	//	Statements 
+//	if (root)
+//	{
+//		root->left = _traversal(process, root->left);
+//		_traversal(process, root->right);
+//		process(root->data);
+//	} //  if 
+//	return dataproc;
+//}	//  _traversal 
+
+
+//template <class TYPE, class KTYPE>
+//bool  AvlTree <TYPE, KTYPE> ::AVL_Delete(KTYPE  dltKey)
+//{
+//	//	Local Definitions 
+//	bool shorter;
+//	bool success;
+//
+//	NODE<TYPE>  *newRoot;
+//
+//	//	Statements 
+//	newRoot = _delete(tree, dltKey, shorter, success);
+//	if (success)
+//	{
+//		tree = newRoot;
+//		count--;
+//	} // if 
+//	return success;
+//}	// AVL_Delete
+
+
+
+//	if (root->left->data->fequency < threshold)
+//	{
+//		newRoot = _delete(root->left, root->left->data->key, shorter, success);
+//		if (success)
+//		{
+//			root->left = newRoot;
+//			count--;
+//		} 
+//	}
+//
+//
+//shorter = false;
+//success = false;
+//if (root->right->data->fequency < threshold)
+//{
+//	newRoot = _delete(root->right, root->right->data->key, shorter, success);
+//	if (success)
+//	{
+//		root->right = newRoot;
+//		count--;
+//	}
+//}
+//
+//if (root->data->fequency < threshold)
+//{
+//	newRoot = _delete(root, root->data->key, shorter, success);
+//	if (success)
+//	{
+//		root = newRoot;
+//		count--;
+//	}
+//}
+
+
 
