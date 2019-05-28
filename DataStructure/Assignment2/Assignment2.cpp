@@ -113,13 +113,13 @@ int main()
 	//tree.AVL_Print();
 
 	cout << tree.AVL_Count() << endl;
-	tree.AVL_PruneTree(2);
+	tree.AVL_PruneTree(3);
 	//tree.AVL_PruneTree(2);
 	//tree.AVL_Print();
 	
 	cout << endl;
 
-	//tree.AVL_Traverse(print);
+	tree.AVL_Traverse(print);
 
 	cout << tree.AVL_Count() << endl;
 }

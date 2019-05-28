@@ -1018,12 +1018,6 @@ inline NODE<TYPE>* AvlTree<TYPE, KTYPE>::_pruning(float threshold, NODE<TYPE>* r
 	bool shorter = false;
 	bool success = false;
 
-
-		
-	if (root->left)
-		root->left = _pruning(threshold, root->left);
-
-
 	if (root)
 	{
 		if (root->left)
@@ -1054,6 +1048,8 @@ inline NODE<TYPE>* AvlTree<TYPE, KTYPE>::_pruning(float threshold, NODE<TYPE>* r
 	}
 
 
+	if (root->left)
+		root->left = _pruning(threshold, root->left);
 
 	if (root->right)
 		root->right = _pruning(threshold, root->right);
