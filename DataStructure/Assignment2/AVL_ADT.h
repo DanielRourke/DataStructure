@@ -422,6 +422,7 @@ NODE<TYPE>*  AvlTree<TYPE,  KTYPE>
 	    success = false;
 	    return NULL;
 	   } //  if -- base case 
+
 	
 	if (dltKey < root->data.key)
 	    {
@@ -441,40 +442,41 @@ NODE<TYPE>*  AvlTree<TYPE,  KTYPE>
 	    //  Found equal node 
 	    {
 	     dltPtr  = root;
+
 	     if (!root->right)
 	         // Only left subtree 
-	         {
+	     {
 	          newRoot  = root->left;
 	          success  = true;
 	          shorter  = true;
 	          delete (dltPtr);
 	          return newRoot;            //  base case 
-	         } //  if true 
-	     else
-	         if (!root->left)
-	             //  Only right subtree 
-	             {
-	              newRoot  = root->right;
-	              success  = true;
-	              shorter  = true;
-	              delete (dltPtr);
-	              return newRoot;        // base case 
-	            } //  if 
-	         else
-	             //  Delete NODE has two subtrees 
-	             {
-	              exchPtr = root->left;
-	              while (exchPtr->right)
-	                  exchPtr = exchPtr->right;
+	     } //  if true 
+	    else if (!root->left)
+	    //  Only right subtree 
+	    {
+	    newRoot  = root->right;
+	    success  = true;
+	    shorter  = true;
+	    delete (dltPtr);
+	    return newRoot;        // base case 
+		} //  if 
+	    else
+	    //  Delete NODE has two subtrees 
+	    {
+
+	    exchPtr = root->left;
+	    while (exchPtr->right)
+	        exchPtr = exchPtr->right;
 	                  
-	              root->data = exchPtr->data;
-	              root->left = _delete (root->left, 
-	                                    exchPtr->data.key,
-	                                    shorter, 
-	                                    success); 
-	              if (shorter)
-	                  root = dltRightBalance (root, shorter); 
-	             } //  else 
+	    root->data = exchPtr->data;
+	    root->left = _delete (root->left, 
+	                        exchPtr->data.key,
+	                        shorter, 
+	                        success); 
+	    if (shorter)
+	        root = dltRightBalance (root, shorter); 
+	    } //  else 
 	
 	    } // equal node 
 	return root; 
@@ -909,14 +911,13 @@ bool   AvlTree<TYPE, KTYPE>
 	//	Local Definitions
 	NODE<TYPE> *node;
 
-
 	if (!tree)
 		return AVL_Insert(dataIn);
 
 	node = _retrieve(key, tree);
 	if (node && node != tree)
 	{
-		node->data.update();
+		node->data.update(dataIn);
 		return true;
 	} // if found
 	else
@@ -941,33 +942,84 @@ NODE<TYPE>*  AvlTree<TYPE, KTYPE>
 	bool shorter = false;
 	bool success = false;
 
+	if (root->left && root->left->data.info < threshold)
+	{
+		root = _delete(root, root->left->data.key, shorter, success);
+		count--;
+		root = _pruneTree(threshold, root);
+		return root;
+	}
+
+	shorter = false;
+	success = false;
+
+	if (root->right && root->right->data.info < threshold)
+	{
+		newRoot = _delete(root, root->right->data.key, shorter, success);
+		count--;
+		root = _pruneTree(threshold, root);
+		return root;
+	}
+
 	if (root->left)
 		root->left = _pruneTree(threshold, root->left);
+
 	if (root->right)
 		root->right = _pruneTree(threshold, root->right);
 
-	if (root->left  && root->left->data.info < threshold)
-	{
-		newRoot = _delete(root, root->left->data.key, shorter, success);
-		if (success)
-		{
-			count--;
-			return _pruneTree(threshold, newRoot);
-		}
-	}
-	else if (root->right && root->right->data.info < threshold)
-	{
-		newRoot = _delete(root, root->right->data.key, shorter, success);
-		if (success)
-		{
-			count--;
-			return _pruneTree(threshold, newRoot);
-		}
-	}
+	return root;
+}
+
+//got left until null 
+//if left left not null
+//else if ( left->info < thres)
+	//delete left send node = node
+	//test node 
+
+// test right right not null
+//elser if right-.info < thre  = 
+	//delete
+//test node again
+
+
+//return node
 	
 
-		return root;
-}
+
+
+////got left
+
+// is node under thres
+
+// check its bal
+
+//delete
+
+
+//------------------------
+//while return true
+//find first delete
+//retrive 
+
+
+
+//---------------------- is left < threshold
+//delete left
+//call again
+//else if right < thres hold
+//delete right
+//call again
+
+//else
+	//go if not nul go left
+	//go if not null go right
+
+
+
+
+
+
+
 
 
 	//if tree is not empty try find data

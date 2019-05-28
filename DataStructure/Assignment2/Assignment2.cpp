@@ -12,12 +12,32 @@ struct DATA
 {
 	CustomString key;
 	float info;
-	void update() {
+	vector<string> files;
+	void update(DATA d)
+	{
 		if (info != NULL)
 			info += 1;
 		else
 			info = 1;
+
+		if (!d.files.empty() && d.files.back() != files.back())
+			files.push_back(d.files.back());
+			
 	}
+
+	friend ostream & operator <<(ostream& os, const DATA d)
+	{
+		os << d.key << "," << d.info << ",";
+		for (auto filename : d.files)
+		{
+			os << filename << ", ";
+		}
+		return os;
+	}
+
+		 
+
+
 	bool operator<(const DATA d) const{
 		return (info < d.info); //Check if the direction is correct
 	}
@@ -41,18 +61,12 @@ bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree);
 //};
 
 
-ostream& operator<<(ostream& os, const CustomString cs)
-{
-	os << cs.val;
-	return os;
-}
-
-
 
 void print(DATA ss) 
 {
-	cout << ss.key << "," << ss.info << endl;
+	cout << ss << endl;
 }
+
 
 int main()
 {
@@ -96,15 +110,19 @@ int main()
 		cout << "Key: " << results.top().key << "  Fequency: " << results.top().info << endl;
 		results.pop();
 	}
+	tree.AVL_Print();
 
-
+	cout << tree.AVL_Count() << endl;
+	tree.AVL_PruneTree(2);
 	tree.AVL_PruneTree(2);
 	tree.AVL_Print();
+	
 	cout << endl;
 
 	tree.AVL_Traverse(print);
-}
 
+	cout << tree.AVL_Count() << endl;
+}
 
 
 bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree)
@@ -125,6 +143,8 @@ bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree)
 
 		DATA newItem;
 		string word = "";
+		string twoWord = "";
+		string threeWord = "";
 		char c;
 		while ((c = readf.get()) != EOF)
 		{
@@ -140,8 +160,25 @@ bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree)
 			{
 				newItem.info = 1;
 				newItem.key = word;
+				newItem.files.push_back(filename);
 				(*tree).AVL_Update(word, newItem);
+
+				if (threeWord != "")
+				{
+					newItem.key = threeWord + " " + twoWord + " " + word;
+					(*tree).AVL_Update(threeWord + " " + twoWord + " " + word, newItem);
+				}
+
+				if (twoWord != "")
+				{
+					newItem.key = twoWord + " "+ word;
+					(*tree).AVL_Update(twoWord + " " + word, newItem);
+					threeWord = twoWord;
+				}
+				twoWord = word;
 				word = "";
+
+				newItem.files.clear();
 			}
 		}
 

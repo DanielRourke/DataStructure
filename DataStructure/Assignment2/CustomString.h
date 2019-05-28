@@ -9,6 +9,7 @@ private:
 public:
 	CustomString();
 	CustomString(string);
+	CustomString(const CustomString &);
 	~CustomString();
 	bool operator<(const CustomString&) const;
 	bool operator>(const CustomString&) const;
@@ -16,6 +17,12 @@ public:
 	void operator=(string&);
 	friend ostream & operator <<(ostream& os, const CustomString cs);
 };
+
+ostream& operator<<(ostream& os, const CustomString cs)
+{
+	os << cs.val;
+	return os;
+}
 
 
 CustomString::CustomString()
@@ -26,6 +33,11 @@ CustomString::CustomString()
 CustomString::CustomString(string s)
 {
 	this->val = s;
+}
+
+CustomString::CustomString(const CustomString& s)
+{
+	this->val = s.val;
 }
 
 CustomString::~CustomString()
