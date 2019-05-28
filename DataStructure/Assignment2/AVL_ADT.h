@@ -450,7 +450,6 @@ NODE<TYPE>*  AvlTree<TYPE,  KTYPE>
 	     dltPtr  = root;
 
 
-
 		 if (!root->right && !root->left)
 		 {
 			 success = true;
@@ -990,38 +989,80 @@ NODE<TYPE>*  AvlTree<TYPE, KTYPE>
 	return root;
 }
 
+
+//
+//template <class TYPE, class KTYPE>
+//void  AvlTree <TYPE, KTYPE> ::AVL_Pruning(float threshold, NODE<TYPE>* root)
+//{
+//	//	Statements 
+//
+//	NODE<TYPE>  *newRoot;
+//
+//	if (root) {
+//		newRoot = _pruning(threshold, tree);
+//	}
+//	if (root->left)
+//		root->left = _pruneTree(threshold, root->left);
+//
+//	if (root->right)
+//		root->right = _pruneTree(threshold, root->right);
+//	
+//	newRoot = _pruning(threshold, tree);
+//
+//}	// AVL_PruneTree
+
 template<class TYPE, class KTYPE>
 inline NODE<TYPE>* AvlTree<TYPE, KTYPE>::_pruning(float threshold, NODE<TYPE>* root)
 {
 	//	Statements 
+	bool shorter = false;
+	bool success = false;
 
-	if (root->left || root->right)
+
+		
+	if (root->left)
+		root->left = _pruning(threshold, root->left);
+
+
+	if (root)
 	{
-		root->left = _pruning(root->left);
-		root->right = _pruning(root->right);
-
-		if (root->left && root->left->data.info < threshold)
+		if (root->left)
 		{
-			root = _delete(root->left, root->left->data.key, shorter, success);
-			if (success)
-				count--;
-			if (shorter)
-				root = dltRightBalance(root, shorter);
-			root = _pruneTree(threshold, root);
+			if (root->left && root->left->data.info < threshold)
+			{
+				root = _delete(root, root->left->data.key, shorter, success);
+				if (success)
+					count--;
+				//if (shorter)
+				//	root = dltRightBalance(root, shorter);
+				root = _pruning(threshold, root);
+			}
 		}
 
-		if (root->right && root->right->data.info < threshold)
+		if (root->right)
 		{
-			newRoot = _delete(root->right, root->right->data.key, shorter, success);
-			if (success)
-				count--;
-			if (shorter)
-				root = dltLeftBalance(root, shorter);
-			root = _pruneTree(threshold, root);
-		}
-	} // if 
+			if (root->right && root->right->data.info < threshold)
+			{
+				root = _delete(root, root->right->data.key, shorter, success);
+				if (success)
+					count--;
+				//if (shorter)
+				//	root = dltLeftBalance(root, shorter);
+				root = _pruning(threshold, root);
+			}
+		} // if 
+	}
+
+
+
+	if (root->right)
+		root->right = _pruning(threshold, root->right);
+	
 	return root;
 }
+
+
+
 
 //got left until null 
 //if left left not null

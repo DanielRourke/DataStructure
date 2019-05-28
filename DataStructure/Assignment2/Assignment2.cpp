@@ -119,7 +119,7 @@ int main()
 	
 	cout << endl;
 
-	tree.AVL_Traverse(print);
+	//tree.AVL_Traverse(print);
 
 	cout << tree.AVL_Count() << endl;
 }
