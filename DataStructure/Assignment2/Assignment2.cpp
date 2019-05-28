@@ -110,12 +110,12 @@ int main()
 		cout << "Key: " << results.top().key << "  Fequency: " << results.top().info << endl;
 		results.pop();
 	}
-	tree.AVL_Print();
+	//tree.AVL_Print();
 
 	cout << tree.AVL_Count() << endl;
 	tree.AVL_PruneTree(2);
-	tree.AVL_PruneTree(2);
-	tree.AVL_Print();
+	//tree.AVL_PruneTree(2);
+	//tree.AVL_Print();
 	
 	cout << endl;
 

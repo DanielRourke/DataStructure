@@ -40,6 +40,7 @@ class AvlTree
 	                                  bool&        shorter,
 	                                  bool&        success);
 
+
 	    NODE<TYPE>  *dltLeftBalance  (NODE<TYPE>  *root,
 	                                  bool&        smaller);
 	    NODE<TYPE>  *dltRightBalance (NODE<TYPE>  *root, 
@@ -63,6 +64,7 @@ class AvlTree
 									 KTYPE		 maxKey,
 									 priority_queue<TYPE> *heap);
 		NODE<TYPE>* _pruneTree(float threshold, NODE<TYPE>* root);
+		NODE<TYPE>* _pruning(float threshold, NODE<TYPE>* root);
 	 public:
 	          AvlTree (void);
 			  virtual ~AvlTree  (void);
@@ -423,6 +425,10 @@ NODE<TYPE>*  AvlTree<TYPE,  KTYPE>
 	    return NULL;
 	   } //  if -- base case 
 
+
+
+
+
 	
 	if (dltKey < root->data.key)
 	    {
@@ -443,7 +449,16 @@ NODE<TYPE>*  AvlTree<TYPE,  KTYPE>
 	    {
 	     dltPtr  = root;
 
-	     if (!root->right)
+
+
+		 if (!root->right && !root->left)
+		 {
+			 success = true;
+			 shorter = true;
+			 delete (dltPtr);
+			 return NULL;
+		 }
+	     else if (!root->right)
 	         // Only left subtree 
 	     {
 	          newRoot  = root->left;
@@ -929,7 +944,7 @@ template <class TYPE, class KTYPE>
 void  AvlTree <TYPE, KTYPE> ::AVL_PruneTree(float threshold)
 {
 	//	Statements 
-	tree = _pruneTree(threshold, tree);
+	tree = _pruning(threshold, tree);
 }	// AVL_PruneTree
 
 template <class TYPE, class KTYPE>
@@ -945,20 +960,25 @@ NODE<TYPE>*  AvlTree<TYPE, KTYPE>
 	if (root->left && root->left->data.info < threshold)
 	{
 		root = _delete(root, root->left->data.key, shorter, success);
-		count--;
+		if (success)
+			count--;
+		if (shorter)
+			root = dltRightBalance(root, shorter);
 		root = _pruneTree(threshold, root);
-		return root;
 	}
 
 	shorter = false;
 	success = false;
 
+
 	if (root->right && root->right->data.info < threshold)
 	{
 		newRoot = _delete(root, root->right->data.key, shorter, success);
-		count--;
+		if(success)
+			count--;
+		if (shorter)
+			root = dltLeftBalance(root, shorter);
 		root = _pruneTree(threshold, root);
-		return root;
 	}
 
 	if (root->left)
@@ -967,6 +987,39 @@ NODE<TYPE>*  AvlTree<TYPE, KTYPE>
 	if (root->right)
 		root->right = _pruneTree(threshold, root->right);
 
+	return root;
+}
+
+template<class TYPE, class KTYPE>
+inline NODE<TYPE>* AvlTree<TYPE, KTYPE>::_pruning(float threshold, NODE<TYPE>* root)
+{
+	//	Statements 
+
+	if (root->left || root->right)
+	{
+		root->left = _pruning(root->left);
+		root->right = _pruning(root->right);
+
+		if (root->left && root->left->data.info < threshold)
+		{
+			root = _delete(root->left, root->left->data.key, shorter, success);
+			if (success)
+				count--;
+			if (shorter)
+				root = dltRightBalance(root, shorter);
+			root = _pruneTree(threshold, root);
+		}
+
+		if (root->right && root->right->data.info < threshold)
+		{
+			newRoot = _delete(root->right, root->right->data.key, shorter, success);
+			if (success)
+				count--;
+			if (shorter)
+				root = dltLeftBalance(root, shorter);
+			root = _pruneTree(threshold, root);
+		}
+	} // if 
 	return root;
 }
 
@@ -1233,4 +1286,114 @@ void  AvlTree<TYPE, KTYPE>
 //}
 
 
+//template <class TYPE, class KTYPE>
+//NODE<TYPE>*  AvlTree<TYPE, KTYPE>
+//::_delete(NODE<TYPE> *root,
+//	KTYPE       dltKey,
+//	bool&       shorter,
+//	bool&       success)
+//{
+//	//  Local Definitions 
+//	NODE<TYPE> *dltPtr;
+//	NODE<TYPE> *exchPtr;
+//	NODE<TYPE> *newRoot;
+//
+//	// 	Statements 
+//	if (!root)
+//	{
+//		shorter = false;
+//		success = false;
+//		return NULL;
+//	} //  if -- base case 
+//
+//
+//
+//
+//	if (dltKey < root->data.key)
+//	{
+//		root->left = _delete(root->left, dltKey,
+//			shorter, success);
+//		if (shorter)
+//			root = dltRightBalance(root, shorter);
+//	} // if less 
+//	else if (dltKey > root->data.key)
+//	{
+//		root->right = _delete(root->right, dltKey,
+//			shorter, success);
+//		if (shorter)
+//			root = dltLeftBalance(root, shorter);
+//	} //  if greater 
+//	else
+//		//  Found equal node 
+//	{
+//		dltPtr = root;
+//
+//		if (!root->right)
+//			// Only left subtree 
+//		{
+//			newRoot = root->left;
+//			success = true;
+//			shorter = true;
+//			delete (dltPtr);
+//			return newRoot;            //  base case 
+//		} //  if true 
+//		else if (!root->left)
+//			//  Only right subtree 
+//		{
+//			newRoot = root->right;
+//			success = true;
+//			shorter = true;
+//			delete (dltPtr);
+//			return newRoot;        // base case 
+//		} //  if 
+//		else
+//			//  Delete NODE has two subtrees 
+//		{
+//
+//			exchPtr = root->left;
+//			while (exchPtr->right)
+//				exchPtr = exchPtr->right;
+//
+//			root->data = exchPtr->data;
+//			root->left = _delete(root->left,
+//				exchPtr->data.key,
+//				shorter,
+//				success);
+//			if (shorter)
+//				root = dltRightBalance(root, shorter);
+//		} //  else 
+//
+//	} // equal node 
+//	return root;
+//}	// _delete 
+//
 
+//
+//
+//NODE<TYPE>  *newRoot;
+//bool shorter = false;
+//bool success = false;
+//
+//if (root->left && root->left->data.info < threshold)
+//{
+//	root = _delete(root, root->left->data.key, shorter, success);
+//	if (success)
+//		count--;
+//	if (shorter)
+//		root = dltRightBalance(root, shorter);
+//	root = _pruneTree(threshold, root);
+//}
+//
+//shorter = false;
+//success = false;
+//
+//
+//if (root->right && root->right->data.info < threshold)
+//{
+//	newRoot = _delete(root, root->right->data.key, shorter, success);
+//	if (success)
+//		count--;
+//	if (shorter)
+//		root = dltLeftBalance(root, shorter);
+//	root = _pruneTree(threshold, root);
+//}
