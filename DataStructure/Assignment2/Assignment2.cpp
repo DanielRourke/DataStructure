@@ -30,7 +30,7 @@ struct DATA
 		os << d.key << "," << d.info << ",";
 		for (auto filename : d.files)
 		{
-			os << filename << ", ";
+			os << filename << ",";
 		}
 		return os;
 	}
@@ -46,6 +46,8 @@ struct DATA
 
 
 bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree);
+void loadFile(string filename, AvlTree<DATA, CustomString> * tree);
+
 
 //struct DATA
 //{
@@ -72,6 +74,7 @@ int main()
 {
 	
 	AvlTree<DATA, CustomString> tree;
+	AvlTree<DATA, CustomString> tree2;
 
 	cout << "Trying to Open " << "\\Textfiles\\AI_articles_1.txt" << endl;
 	addFileToTree("Textfiles/AI_articles_1.txt", &tree);
@@ -115,13 +118,20 @@ int main()
 	cout << tree.AVL_Count() << endl;
 	tree.AVL_PruneTree(3);
 	//tree.AVL_PruneTree(2);
-	//tree.AVL_Print();
+	tree.AVL_Print();
 	
 	cout << endl;
 
-	tree.AVL_Traverse(print);
+	//tree.AVL_Traverse(print);
 
 	cout << tree.AVL_Count() << endl;
+
+	tree.AVL_Save("Textfiles/tree.txt");
+
+	
+	loadFile("Textfiles/tree.txt", &tree2);
+	
+
 }
 
 
@@ -185,21 +195,95 @@ bool addFileToTree(string filename, AvlTree<DATA, CustomString> * tree)
 		cout << "File added to tree." << endl;
 
 	}
+
+	readf.close();
 	return true;
 }
 
-//template <class TYPE>
-//bool addEntryToHeap(TYPE data)
-//{
-//	//for the length of string
-//	for (int i = 0; i < input.length(); i++)
-//	{
-//		if (data.key[i] != input[i])
-//		{
-//			return false;
-//		}
-//	}
-//	
-//	//
-//
-//}
+void loadFile(string filename, AvlTree<DATA, CustomString> * tree)
+{
+
+	ifstream readf;
+
+	readf.open(filename);
+
+	DATA newItem;
+	char c;
+	string key = "";
+	string info = "";
+	string fileString;
+	int section = 0;
+	if (readf.is_open())
+	{
+		cout << "Opened file: " << endl;
+		while ((c = readf.get()) != EOF)
+		{
+			if (c == '[')
+			{
+				section = 0;
+			}
+			else if (c == ',')
+			{
+				switch (section)
+				{
+				case 0:
+					newItem.key = key;
+					key = "";
+					section = 1;
+					break;
+				case 1:
+					newItem.info = stof(info);
+					info = "";
+					section = 2;
+					break;
+				case 2:
+					newItem.files.push_back(fileString);
+					fileString = "";
+					break;
+				default:
+					break;
+				}
+			}
+			else if (c == ']')
+			{
+				if (key != "NULL")
+				{
+					(*tree).AVL_Insert(newItem);
+				}
+				key = "";
+				info = "";
+				fileString = "";
+				newItem.files.clear();
+				section = -1;
+			}
+			else
+			{
+				switch (section)
+				{
+				case 0:
+					key += c;
+					break;
+				case 1:
+					info += c;
+					break;
+				case 2:
+					fileString += c;
+					break;
+				case 3:
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		cout << "Error opeing file";
+	}
+	cout << " Tree Loaded From " << filename << endl;
+	readf.close();
+	
+	(*tree).AVL_Print();
+//	return tree;
+}
+
+

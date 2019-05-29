@@ -65,6 +65,9 @@ class AvlTree
 									 priority_queue<TYPE> *heap);
 		NODE<TYPE>* _pruneTree(float threshold, NODE<TYPE>* root);
 		NODE<TYPE>* _pruning(float threshold, NODE<TYPE>* root);
+
+		void _save(NODE<TYPE>* root, ofstream * file);
+		bool AVL_Load(string filename);
 	 public:
 	          AvlTree (void);
 			  virtual ~AvlTree  (void);
@@ -85,6 +88,7 @@ class AvlTree
 
 
 		priority_queue<TYPE> AVL_RetrieveInRange(KTYPE minKey, KTYPE maxKey);
+		bool AVL_Save(string filename);
 	} ; // class AvlTree
 	
 /*	=================== Constructor ===================	
@@ -943,7 +947,7 @@ template <class TYPE, class KTYPE>
 void  AvlTree <TYPE, KTYPE> ::AVL_PruneTree(float threshold)
 {
 	//	Statements 
-	tree = _pruning(threshold, tree);
+	tree = _pruneTree(threshold, tree);
 }	// AVL_PruneTree
 
 template <class TYPE, class KTYPE>
@@ -955,35 +959,20 @@ NODE<TYPE>*  AvlTree<TYPE, KTYPE>
 	NODE<TYPE>  *newRoot;
 	bool shorter = false;
 	bool success = false;
-
-	if (root->left && root->left->data.info < threshold)
+	
+	if (root && root->data.info < threshold)
 	{
-		root = _delete(root, root->left->data.key, shorter, success);
-		if (success)
-			count--;
-		if (shorter)
-			root = dltRightBalance(root, shorter);
-		root = _pruneTree(threshold, root);
+				root = _delete(root, root->data.key, shorter, success);
+				if (success)
+					count--;
+				root = _pruneTree(threshold, root);
 	}
 
-	shorter = false;
-	success = false;
-
-
-	if (root->right && root->right->data.info < threshold)
-	{
-		newRoot = _delete(root, root->right->data.key, shorter, success);
-		if(success)
-			count--;
-		if (shorter)
-			root = dltLeftBalance(root, shorter);
-		root = _pruneTree(threshold, root);
-	}
-
-	if (root->left)
+	if (root)
+		if (root->left)
 		root->left = _pruneTree(threshold, root->left);
-
-	if (root->right)
+	if (root)
+		if (root->right)
 		root->right = _pruneTree(threshold, root->right);
 
 	return root;
@@ -1057,7 +1046,84 @@ inline NODE<TYPE>* AvlTree<TYPE, KTYPE>::_pruning(float threshold, NODE<TYPE>* r
 	return root;
 }
 
+//
+//
+//
+/* Save*/
+template<class TYPE, class KTYPE>
+inline bool AvlTree<TYPE, KTYPE>::AVL_Save(string filename)
+{
+	ofstream file;
+	
+	file.open(filename, fstream::app);
 
+	if (file.is_open())
+	{
+		if (tree) {
+			_save(tree, &file);
+			cout << " File Saved to " << filename << endl;
+			file.close();
+			return true;
+		}
+	}
+	else
+	{
+		cout << "Error opeing file";
+	}
+
+	file.close();
+;
+	return false;
+}   /* Save*/
+
+
+template<class TYPE, class KTYPE>
+inline void AvlTree<TYPE, KTYPE>::_save(NODE<TYPE>* root,ofstream * file)
+{
+	
+		if (root)
+		{
+			(*file) << '[' << root->data << ']' << '\n';
+			_save( root->left, file);
+			_save( root->right, file);
+		}
+		else
+		{
+			(*file) << "[NULL]" << '\n';
+		}
+
+
+}
+
+
+///* Read*/
+//template<class TYPE, class KTYPE>
+//inline bool AvlTree<TYPE, KTYPE>::AVL_Load(string filename)
+//{
+//	if(tree)
+//		_destroyAVL(tree);
+//
+//	
+//}   /* Save*/
+
+//
+//template<class TYPE, class KTYPE>
+//inline void AvlTree<TYPE, KTYPE>::_load(NODE<TYPE>* root, ofstream * file)
+//{
+//
+//	if (root)
+//	{
+//		(*file) << '[' << root->data << ']' << '\n';
+//		_save(root->left, file);
+//		_save(root->right, file);
+//	}
+//	else
+//	{
+//		(*file) << "[NULL]" << '\n';
+//	}
+//
+//
+//}
 
 
 //got left until null 
